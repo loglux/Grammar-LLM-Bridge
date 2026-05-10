@@ -135,6 +135,17 @@ CI runs the same `ruff` + `pytest` on every push to `master` against Python 3.11
 
 The LT plugin sends an annotated text (text + markup parts) to `/v2/check`. The Bridge extracts a *logical* text without markup, builds a position map, optionally splits the logical text into chunks, and asks the configured LLM to find grammar errors. The LLM's suggestions come back with offsets in logical-text space; the Bridge maps them back to the original markup-aware offsets the plugin expects, deduplicates overlapping spans, and returns an LT-compatible response. LaTeX math blocks are detected and protected so they aren't underlined and aren't cut in the middle by the chunker.
 
+## Languages
+
+This is an **experimental** project tuned around English (en-GB / en-US is what the test suite covers). Mechanically the Bridge is language-agnostic — it forwards whatever `language` code the client sends (`ru-RU`, `de-DE`, `fr-FR`, ...) to the LLM, and modern multilingual models (DeepSeek, GPT-4.x, Claude, ...) will return grammar suggestions for that language.
+
+Caveat: the system prompt in `app/prompts.py` is built from English-centric guard blocks (subject–verb agreement, article rules, ESL hints). On other languages those rules either don't apply or produce a different false-positive profile. To get production-quality results in another language you'll likely want to:
+
+1. Adapt the prompt blocks for that language (or add a per-language overlay — `prompt_rules.md` documents the forbid/allow structure).
+2. Run a small gold-suite (`qa-results/quality/`) for the target language to compare model outputs.
+
+See [`docs/prompt_rules.md`](./docs/prompt_rules.md), [`docs/LEVEL_MODES.md`](./docs/LEVEL_MODES.md), and [`docs/style_prompt_blocks.md`](./docs/style_prompt_blocks.md) for how prompts are composed and how `picky`/`default` modes inherit rules.
+
 ## Privacy
 
 Your text is sent to whichever LLM provider you configure. If you'd rather keep everything on your machine, point the Bridge at a local Ollama (or similar) instance — same `OPENAI_BASE_URL` / `LLM_MODEL` pair, no external traffic.
