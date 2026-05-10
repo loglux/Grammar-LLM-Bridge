@@ -145,10 +145,10 @@ Two caveats — what is and isn't there:
 - **System prompt is English-centric**: the rule blocks in `app/prompts.py` (subject–verb agreement, article rules, ESL hints) are written for English. On other languages they don't apply or produce a different false-positive profile.
 - **No real auto-detection yet**: sending `language=auto` just forwards the string to the LLM, which usually figures the language out on its own but without confidence guarantees. A comparison of candidate detectors (fastText/langid/cld3/langdetect) for a future implementation lives in [`docs/research/QA_LANGUAGE_DETECTION.md`](./docs/research/QA_LANGUAGE_DETECTION.md).
 
-To get production-quality results in another language you'll likely want to:
+To get production-quality results in another language you'll need:
 
-1. Adapt the prompt blocks for that language (or add a per-language overlay — [`docs/prompt_rules.md`](./docs/prompt_rules.md) documents the forbid/allow structure).
-2. Run a small gold-suite (`qa-results/quality/`) for the target language to compare model outputs.
+1. A **dedicated set of prompt blocks for that language** — not a translation of the English ones. Russian, German, Spanish each have their own grammar concerns (cases, no articles, ser/estar, agreement patterns) that English rules simply don't cover. Add a per-language overlay alongside the English one (see [`docs/prompt_rules.md`](./docs/prompt_rules.md) for the forbid/allow structure that each language module follows).
+2. A small gold-suite (`qa-results/quality/<lang>/`) for the target language so you can compare model outputs and catch regressions.
 
 See also [`docs/LEVEL_MODES.md`](./docs/LEVEL_MODES.md) for how `picky`/`default` modes inherit rules, and [`docs/style_prompt_blocks.md`](./docs/style_prompt_blocks.md) for style/toneTags presets.
 

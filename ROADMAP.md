@@ -6,7 +6,7 @@ Not a release schedule — a public backlog of things we'd like to improve next.
 
 The Bridge advertises multiple languages via `GET /v2/languages` and forwards whichever `language` code the client sends to the LLM. The plumbing is there, but the prompt is English-centric.
 
-- [ ] **Per-language prompt blocks.** Today `app/prompts.py` builds one prompt from English-only guard blocks (SVA, article rules, ESL hints).
+- [ ] **Per-language prompt blocks.** Today `app/prompts.py` builds one prompt from English-only guard blocks (SVA, article rules, ESL hints). These aren't a starting point for other languages — each language needs its own native set of rules (Russian has no articles, German has cases and compounds, Spanish has ser/estar and accents, etc.).
 
   Planned layout (replaces the current single file):
 
