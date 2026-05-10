@@ -133,7 +133,7 @@ pytest tests/ -v             # unit tests (currently 21)
 
 CI runs the same `ruff` + `pytest` on every push to `master` against Python 3.11 and 3.12 — see [`.github/workflows/ci.yml`](./.github/workflows/ci.yml).
 
-## How it works (one paragraph)
+## How it works
 
 The LT plugin sends an annotated text (text + markup parts) to `/v2/check`. The Bridge extracts a *logical* text without markup, builds a position map, optionally splits the logical text into chunks, and asks the configured LLM to find grammar errors. The LLM's suggestions come back with offsets in logical-text space; the Bridge maps them back to the original markup-aware offsets the plugin expects, deduplicates overlapping spans, and returns an LT-compatible response. LaTeX math blocks are detected and protected so they aren't underlined and aren't cut in the middle by the chunker.
 
