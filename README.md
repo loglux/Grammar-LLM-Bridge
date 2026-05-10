@@ -12,7 +12,14 @@ Tested with the two main Obsidian LT plugins:
 - [`Clemens-E/obsidian-languagetool-plugin`](https://github.com/Clemens-E/obsidian-languagetool-plugin) — the original (maintenance mode).
 - [`wrenger/obsidian-languagetool`](https://github.com/wrenger/obsidian-languagetool) — a more active fork.
 
-Both send `apiKey` and `username` in the request body (form-urlencoded); the Bridge's auth middleware understands that flow.
+If you want a build that includes a pending fix for the long-standing auto-check
+"underlines may not move correctly when typing" race condition, see
+[`loglux/obsidian-languagetool`](https://github.com/loglux/obsidian-languagetool) —
+a fork of `wrenger` with the fix applied (also submitted upstream as
+[wrenger #56](https://github.com/wrenger/obsidian-languagetool/pull/56) and
+[Clemens-E #144](https://github.com/Clemens-E/obsidian-languagetool-plugin/pull/144)).
+
+All three send `apiKey` and `username` in the request body (form-urlencoded); the Bridge's auth middleware understands that flow.
 
 ## Quick start
 
