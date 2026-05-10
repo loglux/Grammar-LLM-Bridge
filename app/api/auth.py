@@ -2,7 +2,6 @@
 Authentication endpoints.
 """
 import logging
-from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
@@ -163,7 +162,7 @@ async def create_new_api_key(
     )
 
 
-@router.get("/api-keys", response_model=List[dict])
+@router.get("/api-keys", response_model=list[dict])
 async def list_api_keys(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)

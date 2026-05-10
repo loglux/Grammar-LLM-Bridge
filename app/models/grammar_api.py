@@ -2,7 +2,6 @@
 Pydantic models for LanguageTool-compatible API.
 """
 from pydantic import BaseModel, ConfigDict, Field
-from typing import List, Optional, Union
 
 
 class Replacement(BaseModel):
@@ -15,16 +14,16 @@ class RuleCategory(BaseModel):
 
 
 class RuleUrl(BaseModel):
-    name: Optional[str] = None
-    value: Optional[str] = None
+    name: str | None = None
+    value: str | None = None
 
 
 class Rule(BaseModel):
     id: str
     description: str
     issueType: str = "grammar"
-    category: Optional[RuleCategory] = None
-    urls: Optional[List[RuleUrl]] = None
+    category: RuleCategory | None = None
+    urls: list[RuleUrl] | None = None
 
 
 class TypeInfo(BaseModel):
@@ -39,8 +38,8 @@ class Context(BaseModel):
 
 class Match(BaseModel):
     message: str
-    shortMessage: Optional[str] = ""
-    replacements: List[Replacement]
+    shortMessage: str | None = ""
+    replacements: list[Replacement]
     offset: int
     length: int
     context: Context
@@ -49,7 +48,7 @@ class Match(BaseModel):
     rule: Rule
     ignoreForIncompleteSentence: bool = True
     contextForSureMatch: int = -1
-    errorText: Optional[str] = None
+    errorText: str | None = None
 
 
 class Software(BaseModel):
@@ -70,7 +69,7 @@ class DetectedLanguage(BaseModel):
     name: str
     code: str
     confidence: float
-    source: Optional[str] = None
+    source: str | None = None
 
 
 class LanguageInfo(BaseModel):
@@ -89,16 +88,16 @@ class ExtendedSentenceRange(BaseModel):
 
     from_: int = Field(..., alias="from")
     to: int
-    detectedLanguages: List[DetectedLanguageRate]
+    detectedLanguages: list[DetectedLanguageRate]
 
 
 class LTResponse(BaseModel):
     software: Software
     warnings: Warnings
     language: LanguageInfo
-    matches: List[Match]
-    sentenceRanges: List[List[int]]
-    extendedSentenceRanges: List[ExtendedSentenceRange]
+    matches: list[Match]
+    sentenceRanges: list[list[int]]
+    extendedSentenceRanges: list[ExtendedSentenceRange]
 
 
 class CheckRequest(BaseModel):
@@ -109,7 +108,7 @@ class CheckRequest(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
-    text: Optional[str] = None
-    language: Optional[str] = "en-GB"
-    data: Optional[Union[str, dict]] = None
-    enabledRules: Optional[str] = None
+    text: str | None = None
+    language: str | None = "en-GB"
+    data: str | dict | None = None
+    enabledRules: str | None = None

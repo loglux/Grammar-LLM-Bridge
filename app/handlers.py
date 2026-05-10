@@ -5,7 +5,6 @@ Orchestrates text processing, LLM calls, position mapping, and response building
 import asyncio
 import logging
 import time
-from typing import Optional
 from app.config import (
     LLM_CHUNKING, LLM_CHUNK_SIZE, LLM_CHUNK_OVERLAP, LLM_CHUNK_THRESHOLD,
     LLM_CHUNK_STRATEGY,
@@ -29,7 +28,7 @@ async def handle_check(
     language: str,
     level: str = "default",
     include_error_text: bool = False,
-    timing: Optional[dict] = None,
+    timing: dict | None = None,
 ):
     """
     Main checking logic - works for BOTH plugins!

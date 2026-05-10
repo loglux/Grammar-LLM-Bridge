@@ -4,7 +4,6 @@ Text extraction, masking, and chunking functions.
 import json
 import logging
 import re
-from typing import Optional
 from app.llm import analyze_with_provider
 
 logger = logging.getLogger("customlt")
@@ -261,8 +260,8 @@ def recursive_chunk(
     text: str,
     max_len: int,
     overlap: int = 0,
-    protected_ranges: Optional[list[tuple[int, int]]] = None,
-    separators: Optional[list[str]] = None,
+    protected_ranges: list[tuple[int, int]] | None = None,
+    separators: list[str] | None = None,
 ) -> list[tuple[str, int, int, int]]:
     """
     Recursive character splitter inspired by LangChain's
@@ -333,8 +332,8 @@ def _recursive_anchors(
             idx = j + len(sep)
 
         anchors: list[tuple[int, int]] = []
-        cur_s: Optional[int] = None
-        cur_e: Optional[int] = None
+        cur_s: int | None = None
+        cur_e: int | None = None
         for p_s, p_e in parts:
             p_len = p_e - p_s
             if p_len > max_len:
@@ -414,7 +413,7 @@ def _merge_protected(
 
 
 async def retry_missing_on_sentences(
-    logical_text: str, missing_matches: list, language: str, level: str, timing: Optional[dict] = None
+    logical_text: str, missing_matches: list, language: str, level: str, timing: dict | None = None
 ) -> list:
     """
     For error_text entries that were not found, retry LLM on the containing sentence

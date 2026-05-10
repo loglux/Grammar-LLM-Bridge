@@ -2,7 +2,6 @@
 User database operations.
 """
 from datetime import datetime
-from typing import Optional
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.connection import Base
@@ -45,7 +44,7 @@ async def create_user(db: AsyncSession, user: UserCreate, hashed_password: str) 
     )
 
 
-async def get_user_by_id(db: AsyncSession, user_id: int) -> Optional[UserModel]:
+async def get_user_by_id(db: AsyncSession, user_id: int) -> UserModel | None:
     """Get user by ID."""
     result = await db.execute(select(UserTable).where(UserTable.id == user_id))
     db_user = result.scalar_one_or_none()
@@ -63,7 +62,7 @@ async def get_user_by_id(db: AsyncSession, user_id: int) -> Optional[UserModel]:
     )
 
 
-async def get_user_by_username(db: AsyncSession, username: str) -> Optional[UserModel]:
+async def get_user_by_username(db: AsyncSession, username: str) -> UserModel | None:
     """Get user by username."""
     result = await db.execute(select(UserTable).where(UserTable.username == username))
     db_user = result.scalar_one_or_none()
@@ -81,7 +80,7 @@ async def get_user_by_username(db: AsyncSession, username: str) -> Optional[User
     )
 
 
-async def get_user_by_email(db: AsyncSession, email: str) -> Optional[UserModel]:
+async def get_user_by_email(db: AsyncSession, email: str) -> UserModel | None:
     """Get user by email."""
     result = await db.execute(select(UserTable).where(UserTable.email == email))
     db_user = result.scalar_one_or_none()

@@ -4,7 +4,6 @@ HTTP client for LLM API calls with retry logic.
 import asyncio
 import logging
 import httpx
-from typing import Optional
 from app.config import (
     LLM_API_KEY,
     DEFAULT_BASE_URL,
@@ -16,7 +15,7 @@ from app.config import (
 
 logger = logging.getLogger("customlt")
 
-HTTP_CLIENT: Optional[httpx.AsyncClient] = None
+HTTP_CLIENT: httpx.AsyncClient | None = None
 
 
 def get_http_client() -> httpx.AsyncClient:
@@ -81,7 +80,7 @@ async def post_chat_completion(payload: dict) -> dict:
     return {}
 
 
-def extract_message_content(response_json: dict) -> Optional[str]:
+def extract_message_content(response_json: dict) -> str | None:
     """Safely pull content string from OpenAI-style response JSON."""
     try:
         return response_json["choices"][0]["message"]["content"]

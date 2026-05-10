@@ -1,12 +1,11 @@
 """
 FastAPI dependencies for authentication.
 """
-from typing import Optional
 from fastapi import Request, HTTPException, status, Depends
 from app.models.auth import User
 
 
-async def get_optional_user(request: Request) -> Optional[User]:
+async def get_optional_user(request: Request) -> User | None:
     """
     Get current user from request state if authenticated.
     Returns None if not authenticated (does not raise exception).
@@ -21,7 +20,7 @@ async def get_optional_user(request: Request) -> Optional[User]:
     return getattr(request.state, "user", None)
 
 
-async def get_current_user(user: Optional[User] = Depends(get_optional_user)) -> User:
+async def get_current_user(user: User | None = Depends(get_optional_user)) -> User:
     """
     Get current authenticated user.
     Raises 401 if not authenticated.

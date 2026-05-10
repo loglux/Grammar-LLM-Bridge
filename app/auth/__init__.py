@@ -5,11 +5,11 @@ from app.auth.dependencies import get_current_user, get_optional_user, require_a
 from app.auth.utils import hash_password, verify_password, generate_api_key, hash_api_key
 
 __all__ = [
+    "generate_api_key",
     "get_current_user",
     "get_optional_user",
-    "require_admin",
+    "hash_api_key",
     "hash_password",
-    "verify_password",
-    "generate_api_key",
-    "hash_api_key"
+    "require_admin",
+    "verify_password"
 ]

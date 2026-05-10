@@ -2,7 +2,6 @@
 Build LanguageTool-compatible responses.
 """
 import logging
-from typing import List
 from app.models import (
     LTResponse, Match, Replacement, Rule, RuleCategory, Context,
     Software, Warnings, LanguageInfo, DetectedLanguage,
@@ -36,7 +35,7 @@ def build_lt_response(original_text: str, lang: str, matches_raw: list, include_
     Build LanguageTool-compatible response.
     Matches contain offsets in ORIGINAL text (with markup).
     """
-    matches: List[Match] = []
+    matches: list[Match] = []
 
     for m in matches_raw:
         try:

@@ -1,0 +1,50 @@
+[project]
+name = "grammar-llm-bridge"
+version = "0.1.0"
+description = "LanguageTool-compatible FastAPI server bridging LT clients (Obsidian, etc.) to OpenAI-compatible LLM backends for grammar checking."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "loglux" }]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = [
+    "venv",
+    ".venv",
+    "__pycache__",
+    "grammar.archive",
+    "qa-results/ad-hoc/*-run-*",
+    "qa-results/quality/run-*",
+    "local",
+]
+
+[tool.ruff.lint]
+# Default Ruff selection (pyflakes + pycodestyle errors) plus useful add-ons.
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "W",    # pycodestyle warnings
+    "B",    # flake8-bugbear (likely bugs)
+    "SIM",  # flake8-simplify
+    "UP",   # pyupgrade (modern Python syntax)
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "E501",   # line-too-long (handled by formatter / line-length=120)
+    "B008",   # function call in default arg — common FastAPI pattern (Depends(...))
+    "B905",   # zip without explicit strict= — fine in our use
+    "RUF001", # ambiguous unicode chars — prompt files intentionally have e.g. en-dash
+    "RUF013", # implicit Optional — legacy code, manual review later
+    "SIM108", # if-else vs ternary — both readable
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B"]  # tests get a pass on bugbear (mock callables, etc.)
+"app/prompts.py" = ["RUF001", "RUF003"]  # prompt strings contain intentional unicode
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"

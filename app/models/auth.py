@@ -2,13 +2,12 @@
 Authentication models for Grammar-LLM-Bridge.
 """
 from datetime import datetime
-from typing import Optional
 from pydantic import BaseModel, Field
 
 
 class User(BaseModel):
     """User account model."""
-    id: Optional[int] = None
+    id: int | None = None
     username: str
     email: str
     hashed_password: str
@@ -20,14 +19,14 @@ class User(BaseModel):
 
 class APIKey(BaseModel):
     """API key model for authentication."""
-    id: Optional[int] = None
+    id: int | None = None
     user_id: int
     key: str  # hashed API key
     name: str  # user-friendly name for the key
     is_active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    last_used_at: Optional[datetime] = None
-    expires_at: Optional[datetime] = None
+    last_used_at: datetime | None = None
+    expires_at: datetime | None = None
 
 
 class UserCreate(BaseModel):
@@ -50,7 +49,7 @@ class UserResponse(BaseModel):
 class APIKeyCreate(BaseModel):
     """Schema for creating a new API key."""
     name: str
-    expires_in_days: Optional[int] = None
+    expires_in_days: int | None = None
 
 
 class APIKeyResponse(BaseModel):
@@ -60,4 +59,4 @@ class APIKeyResponse(BaseModel):
     key: str  # only shown once on creation
     is_active: bool
     created_at: datetime
-    expires_at: Optional[datetime]
+    expires_at: datetime | None

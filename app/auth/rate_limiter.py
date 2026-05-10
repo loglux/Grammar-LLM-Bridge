@@ -3,7 +3,6 @@ Rate limiting for Grammar-LLM-Bridge.
 """
 import time
 import logging
-from typing import Dict, Tuple
 from collections import defaultdict
 
 logger = logging.getLogger("customlt")
@@ -21,8 +20,8 @@ class RateLimiter:
         self.requests_per_hour = requests_per_hour
 
         # Store: {user_id: [(timestamp, count), ...]}
-        self.minute_windows: Dict[int, list] = defaultdict(list)
-        self.hour_windows: Dict[int, list] = defaultdict(list)
+        self.minute_windows: dict[int, list] = defaultdict(list)
+        self.hour_windows: dict[int, list] = defaultdict(list)
 
     def _get_request_count(self, windows: dict, user_id: int, window_seconds: int) -> int:
         """Get total request count within window."""
@@ -32,7 +31,7 @@ class RateLimiter:
             if current_time - ts < window_seconds
         )
 
-    def get_limits(self, user_id: int) -> Tuple[int, int, int, int]:
+    def get_limits(self, user_id: int) -> tuple[int, int, int, int]:
         """
         Get current usage and limits for a user.
         Returns: (minute_used, minute_limit, hour_used, hour_limit)

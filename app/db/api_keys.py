@@ -2,7 +2,6 @@
 API key database operations.
 """
 from datetime import datetime, timedelta
-from typing import Optional, List
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.connection import Base
@@ -28,7 +27,7 @@ async def create_api_key(
     user_id: int,
     hashed_key: str,
     name: str,
-    expires_in_days: Optional[int] = None
+    expires_in_days: int | None = None
 ) -> APIKeyModel:
     """Create a new API key."""
     expires_at = None
@@ -56,7 +55,7 @@ async def create_api_key(
     )
 
 
-async def get_api_key_by_key(db: AsyncSession, hashed_key: str) -> Optional[APIKeyModel]:
+async def get_api_key_by_key(db: AsyncSession, hashed_key: str) -> APIKeyModel | None:
     """Get API key by key value (hashed)."""
     result = await db.execute(
         select(APIKeyTable).where(APIKeyTable.key == hashed_key)
@@ -76,7 +75,7 @@ async def get_api_key_by_key(db: AsyncSession, hashed_key: str) -> Optional[APIK
     )
 
 
-async def get_user_api_keys(db: AsyncSession, user_id: int) -> List[APIKeyModel]:
+async def get_user_api_keys(db: AsyncSession, user_id: int) -> list[APIKeyModel]:
     """Get all API keys for a user."""
     result = await db.execute(
         select(APIKeyTable).where(APIKeyTable.user_id == user_id)
