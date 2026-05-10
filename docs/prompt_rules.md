@@ -9,7 +9,7 @@ The system prompt is built from blocks in `app/prompts.py` that fall into two ro
 
 We treat this pattern as a *semantic firewall*: by default the model is restrained, then specific "ports" are opened for the error types we actually want. New rules should be added in the same shape — a new forbid block needs at least an allow companion if it would block a useful class of corrections, and a new allow block should be narrow enough not to re-introduce style/tone noise.
 
-`MODE_BLOCK` (level=default/picky) tunes how strict the rest of the chain is; it doesn't replace the firewall, just adjusts its sensitivity. Per-language modules planned in [`../ROADMAP.md`](../ROADMAP.md#language-support) will follow the same forbid/allow shape.
+`MODE_BLOCK` (level=default/picky) tunes how strict the firewall is — it doesn't replace it, just adjusts sensitivity. See [`LEVEL_MODES.md`](./LEVEL_MODES.md) for the per-mode behaviour matrix.
 
 The lists below are the current state of the firewall. Update them whenever a prompt block in `app/prompts.py` changes.
 
@@ -30,3 +30,59 @@ The lists below are the current state of the firewall. Update them whenever a pr
 ## Notes
 - System + user split is required (system = instructions, user = Language + Text).
 - When adding new “allow” rules, keep them narrow to avoid noise. Maintain the forbid/allow list here and in prompt updates.
+
+## Future / Planned
+
+These extend the firewall in the same forbid/allow shape rather than replacing it. Ordered roughly by impact.
+
+### Per-language prompt modules
+
+Today `app/prompts.py` is one file built from English-only guard blocks (SVA, article rules, ESL hints). These aren't a starting point for other languages — each language needs its own native rule set (Russian has no articles, German has cases and compounds, Spanish has ser/estar and accents, etc.).
+
+Planned layout (replaces the current single file):
+
+```
+app/prompts/
+├── __init__.py        # get_prompt(language, mode) dispatcher
+├── common.py          # language-agnostic blocks: SYSTEM_INTRO, MODE_BLOCK,
+│                      # output-format rules, LaTeX/markdown guards
+├── en.py              # English: SVA, articles, ESL, confusables
+├── ru.py              # Russian: падежи, согласование, частые ошибки
+├── de.py              # German: cases, articles, compound-word splits
+├── fr.py              # French: accords, élision, accents
+└── es.py              # Spanish: ser/estar, accents, agreement
+```
+
+Dispatcher contract (`app/prompts/__init__.py`):
+
+```python
+def get_prompt(language: str, mode: str) -> str:
+    """Compose the system prompt for the given LT language code and mode.
+
+    Strategy:
+    1. Normalise `language` to a 2-letter root (en-GB → en, ru-RU → ru).
+    2. Start with `common.SYSTEM_INTRO + common.MODE_BLOCK(mode)`.
+    3. If a `app/prompts/<lang>.py` module exists, append its blocks.
+    4. If not, fall back to `en` blocks and log a warning.
+    """
+```
+
+Each language module exports a fixed surface (e.g. `SVA_BLOCK`, `ARTICLE_BLOCK`, `EXTRA_GUARDS`) so the dispatcher can assemble them uniformly. Level modes (`default`/`picky`) are orthogonal to language — `MODE_BLOCK` lives in `common.py` and applies universally; language modules may export an optional `PICKY_EXTRA` block for language-specific picky-only rules.
+
+Tests live under `tests/unit/prompts/test_<lang>.py`, with small per-language gold suites under `qa-results/quality/<lang>/`.
+
+### `language=auto` auto-detection
+
+Research on candidate detectors (fastText / langid / cld3 / langdetect) is in [`research/QA_LANGUAGE_DETECTION.md`](./research/QA_LANGUAGE_DETECTION.md). Once a detector is in, wire it to fill in `language` when the client sends `auto`, then feed the result into the dispatcher above.
+
+### Style / toneTags wiring
+
+Templates exist in [`style_prompt_blocks.md`](./style_prompt_blocks.md): accept `toneTags` / `goal` from the client, expand to the matching block, append below the core grammar guards. Treat as another "allow" overlay on top of the firewall.
+
+### Multi-variant replacements
+
+LT supports `replacements: [{value: ...}, ...]`. The model sometimes packs multiple options into one string. Plan: have prompts request 1–3 variants explicitly, parse the array, and surface all variants to the client.
+
+### Better SVA and confusable handling
+
+The SVA guard reduced false negatives on DeepSeek (see [`research/sva_prompt_block_ab.md`](./research/sva_prompt_block_ab.md)) but OpenAI/Claude remain noisier. Plan: tighten with negative examples and a per-model post-filter.

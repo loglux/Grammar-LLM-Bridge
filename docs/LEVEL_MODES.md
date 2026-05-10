@@ -1,6 +1,6 @@
 # Level Modes (default / picky)
 
-Two strictness levels, mirroring LanguageTool's `level` parameter. Both apply on top of the [forbid/allow firewall](./prompt_rules.md) — they don't replace the rules, they tune how aggressively the model should report borderline cases.
+Two strictness levels, mirroring LanguageTool's `level` parameter. They tune the sensitivity of the [semantic firewall](./prompt_rules.md) — not what the firewall lets through, but how aggressively the model reports borderline cases.
 
 ## API
 
@@ -118,7 +118,6 @@ For the design history that produced the table above — including the decisions
 
 ## See also
 
-- [`prompt_rules.md`](./prompt_rules.md) — the forbid/allow firewall the modes plug into.
+- [`prompt_rules.md`](./prompt_rules.md) — the forbid/allow firewall the modes plug into, plus the planned per-language module layout (which says `MODE_BLOCK` lives in `common.py`, so level modes compose orthogonally with language).
 - [`style_prompt_blocks.md`](./style_prompt_blocks.md) — style/toneTags presets (orthogonal to mode).
 - [`research/sva_prompt_block_ab.md`](./research/sva_prompt_block_ab.md) — A/B result for the SVA guard block.
-- [`../ROADMAP.md#prompts--rules`](../ROADMAP.md#prompts--rules) — planned per-language prompts and how modes compose with them.

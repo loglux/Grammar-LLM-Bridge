@@ -1,6 +1,8 @@
 # Style Prompt Blocks (Draft)
 
-**Purpose:** Reference for adding LT-style goals/toneTags into the system prompt without changing API behavior yet. Derived from `../local/STYLE_LOCAL.md` presets and toneTags mapping.
+**Purpose:** Reference for adding LT-style goals/toneTags into the system prompt without changing API behavior yet. Derived from [`research/style_presets.md`](./research/style_presets.md) and toneTags mapping.
+
+> The blocks below are designed as another "allow" overlay on top of the [forbid/allow firewall](./prompt_rules.md) — the firewall stays in place; style blocks reopen specific stylistic suggestions that the default firewall would suppress. The wiring plan (`toneTags` / `goal` parameter → block selection) is tracked in [`prompt_rules.md`](./prompt_rules.md#style--tonetags-wiring).
 
 ## Usage outline (future)
 - Accept `toneTags` (comma-separated). If absent, accept `goal` as a preset that expands to toneTags. Priority: toneTags > goal > default.
