@@ -124,7 +124,9 @@ def find_error_positions_in_logical(logical_text: str, matches_raw: list, collec
 
             simple_token = _is_simple_token(error_text)
 
-            def _continues_token_right(text: str, end: int) -> bool:
+            # Bind `simple_token` at def time (B023): default-arg capture so
+            # the closures don't rely on the changing loop variable.
+            def _continues_token_right(text: str, end: int, simple_token: bool = simple_token) -> bool:
                 if not simple_token:
                     return False
                 if end <= 0 or end >= len(text):
@@ -136,7 +138,7 @@ def find_error_positions_in_logical(logical_text: str, matches_raw: list, collec
                 # Connector between alnum characters -> still inside token.
                 return text[end - 1].isalnum() and text[end + 1].isalnum()
 
-            def _continues_token_left(text: str, start: int) -> bool:
+            def _continues_token_left(text: str, start: int, simple_token: bool = simple_token) -> bool:
                 if not simple_token:
                     return False
                 if start <= 0 or start >= len(text):
@@ -199,10 +201,12 @@ def find_error_positions_in_logical(logical_text: str, matches_raw: list, collec
                         continue
 
                     # Check if replacement adds leading punctuation that already exists before error_text
-                    if r and error_text and r[0] in ',.;:!?' and error_text[0] != r[0]:
-                        if idx > 0 and logical_text[idx - 1] == r[0]:
-                            logger.debug("Filtered: leading punctuation '%s' already exists before error_text", r[0])
-                            continue
+                    if (
+                        r and error_text and r[0] in ',.;:!?' and error_text[0] != r[0]
+                        and idx > 0 and logical_text[idx - 1] == r[0]
+                    ):
+                        logger.debug("Filtered: leading punctuation '%s' already exists before error_text", r[0])
+                        continue
 
                     # Check if replacement adds trailing punctuation that already exists right after error_text
                     if r and error_text and r[-1] in ',.;:!?':

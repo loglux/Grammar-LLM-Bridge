@@ -46,7 +46,7 @@ def extract_texts_and_mapping(data: dict):
 
             # Add to logical with mapping
             logical_parts.append(text_content)
-            for char in text_content:
+            for _ in text_content:
                 mapping.append(original_pos)
                 original_pos += 1
 
@@ -63,7 +63,7 @@ def extract_texts_and_mapping(data: dict):
                 logical_parts.append(interpret_content)
 
                 # interpretAs characters map to the START of the markup
-                for char in interpret_content:
+                for _ in interpret_content:
                     mapping.append(original_pos)
 
             # Advance original position past the markup
@@ -77,8 +77,8 @@ def extract_texts_and_mapping(data: dict):
     logger.info(f"  Original length (with markup): {len(original_text)}")
     logger.info(f"  Logical length (without markup): {len(logical_text)}")
     logger.info(f"  Mapping length: {len(mapping)}")
-    logger.info(f"  Original preview: {repr(original_text[:80])}")
-    logger.info(f"  Logical preview: {repr(logical_text[:80])}")
+    logger.info(f"  Original preview: {original_text[:80]!r}")
+    logger.info(f"  Logical preview: {logical_text[:80]!r}")
     logger.info("=" * 60)
 
     return original_text, logical_text, mapping
@@ -404,7 +404,7 @@ def _merge_protected(
             inside = any(rs < e < re for rs, re in protected)
             if not inside:
                 break
-            ns, ne = anchors[i + 1]
+            _, ne = anchors[i + 1]
             e = max(e, ne)
             i += 1
         merged.append((s, e))
