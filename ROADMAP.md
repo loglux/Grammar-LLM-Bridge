@@ -38,6 +38,8 @@ The Bridge advertises multiple languages via `GET /v2/languages` and forwards wh
 
   Each language module exports a fixed surface (e.g. `SVA_BLOCK`, `ARTICLE_BLOCK`, `EXTRA_GUARDS`) so the dispatcher can assemble them uniformly.
 
+  Level modes (`default` / `picky`) are **orthogonal to language**: the `MODE_BLOCK` lives in `common.py` and applies universally ("be strict" vs "be lenient" reads the same across languages). Individual language modules may export an optional `PICKY_EXTRA` block for language-specific picky-only rules (e.g. Russian punctuation nuances) that the dispatcher appends only when `mode=picky`.
+
   Tests live under `tests/unit/prompts/test_<lang>.py`, plus a small per-language gold suite under `qa-results/quality/<lang>/`.
 - [ ] **Auto-detection for `language=auto`.** Research on candidate detectors (fastText / langid / cld3 / langdetect) is in [`docs/research/QA_LANGUAGE_DETECTION.md`](./docs/research/QA_LANGUAGE_DETECTION.md). Once a detector is in, wire it to fill in `language` when the client sends `auto`, and feed the result into prompt-block selection.
 - [ ] **Language-specific gold suites.** `qa-results/quality/` currently holds English suites; add small Russian/German/French sets so we can compare model behaviour per language.
