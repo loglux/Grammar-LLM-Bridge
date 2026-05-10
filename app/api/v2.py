@@ -5,8 +5,7 @@ import json
 import logging
 from urllib.parse import parse_qs
 from fastapi import APIRouter, Request, HTTPException, Response
-from app.config import MODEL
-from app.models import LTResponse, CheckRequest
+from app.models import LTResponse
 from app.text_processing import extract_text_from_data
 from app.handlers import handle_check
 

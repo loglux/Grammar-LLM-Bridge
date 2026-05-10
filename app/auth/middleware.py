@@ -1,11 +1,12 @@
 """
 Authentication middleware for Grammar-LLM-Bridge.
 """
+import json
 import logging
 from datetime import datetime
-from fastapi import Request, HTTPException, status
+from urllib.parse import parse_qs
+from fastapi import Request, status
 from fastapi.responses import JSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.connection import async_session_maker
 from app.db.api_keys import get_api_key_by_key, update_api_key_last_used
 from app.db.users import get_user_by_id

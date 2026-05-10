@@ -9,103 +9,15 @@ from app.config import GRAMMAR_ONLY, TYPOGRAPHY_CHECK
 logger = logging.getLogger("customlt")
 
 
-def expand_error_text_with_context(logical_text: str, error_text: str) -> tuple:
-    """
-    Expand error_text with surrounding context to make it unique in the text.
-    Returns (expanded_error_text, count_of_occurrences)
-
-    Strategy:
-    - If error_text appears only once, return as-is
-    - If appears multiple times, add context from left and right until unique
-    - Word boundaries: only match if error_text is surrounded by word boundaries
-    """
-
-    def is_word_boundary(text: str, pos: int) -> bool:
-        """Check if position is at a word boundary (start/end or non-letter)"""
-        if pos < 0 or pos >= len(text):
-            return True
-        return not text[pos].isalpha()
-
-    # Find all positions with word boundary checking
-    positions = []
-    start = 0
-    while True:
-        idx = logical_text.find(error_text, start)
-        if idx == -1:
-            break
-
-        # Check word boundaries
-        before_ok = is_word_boundary(logical_text, idx - 1)
-        after_ok = is_word_boundary(logical_text, idx + len(error_text))
-
-        if before_ok and after_ok:
-            positions.append(idx)
-
-        start = idx + 1
-
-    count = len(positions)
-
-    if count <= 1:
-        # Unique or not found - return as-is
-        return error_text, count
-
-    # Try to expand context to make it unique
-    first_pos = positions[0]
-
-    # Start with original error_text and progressively add context
-    # Try adding words from the left
-    search_pos = first_pos
-    for _ in range(5):  # Try up to 5 words to the left
-        # Find start of word to the left
-        search_pos -= 1
-        while search_pos >= 0 and logical_text[search_pos].isspace():
-            search_pos -= 1
-
-        if search_pos < 0:
-            break
-
-        # Find start of that word
-        while search_pos > 0 and not logical_text[search_pos - 1].isspace():
-            search_pos -= 1
-
-        expanded = logical_text[search_pos:first_pos + len(error_text)]
-
-        if logical_text.count(expanded) == 1:
-            logger.info("Expanded error_text with left context: %r (was %r)", expanded, error_text)
-            return expanded, len(positions)
-
-        if search_pos == 0:
-            break
-
-    # If still not unique, try adding context from the right
-    context_right = 0
-    end_pos = first_pos + len(error_text)
-    while context_right < 20:  # Limit right context to 20 chars
-        if end_pos + context_right >= len(logical_text):
-            break
-
-        context_right += 1
-        expanded = logical_text[first_pos:end_pos + context_right]
-
-        if logical_text.count(expanded) == 1:
-            logger.info("Expanded error_text with right context: %r (was %r)", expanded, error_text)
-            return expanded, len(positions)
-
-    # If still not unique, use both left and right
-    expanded = logical_text[max(0, first_pos - 10):min(len(logical_text), end_pos + 10)]
-    logger.warning("Could not make error_text unique, using larger context: %r (occurrences: %d)", expanded, len(positions))
-    return expanded, len(positions)
-
-
 def find_error_positions_in_logical(logical_text: str, matches_raw: list, collect_missing: bool = True):
     """
     Find actual positions of errors in LOGICAL text based on error_text from LLM.
     Returns positions in LOGICAL text (without markup).
     """
-    skip_ranges = []
-    # Accept optional mask ranges passed alongside the logical text
+    # Accept (text, mask_ranges) tuple for backward compatibility; mask_ranges
+    # is currently filtered upstream in handlers.py and not used here.
     if isinstance(logical_text, tuple) and len(logical_text) == 2:
-        logical_text, skip_ranges = logical_text
+        logical_text = logical_text[0]
 
     result = []
     used_ranges = []  # Store (start, end) tuples to detect overlaps properly
@@ -152,14 +64,6 @@ def find_error_positions_in_logical(logical_text: str, matches_raw: list, collec
         if not error_text:
             logger.warning("Empty error_text in match: %r", m)
             continue
-
-        # Context expansion DISABLED - it breaks replacements
-        # The used_ranges check (line 869) already handles duplicate error_text correctly
-        # by skipping overlapping positions, so expansion is unnecessary and harmful.
-        # expanded_error_text, occurrence_count = expand_error_text_with_context(logical_text, error_text)
-        # if expanded_error_text != error_text:
-        #     logger.info("Expanded error_text from %r to %r (occurrences: %d)", error_text, expanded_error_text, occurrence_count)
-        #     error_text = expanded_error_text
 
         # Get replacements array
         repls = m.get("replacements", [])

@@ -7,11 +7,9 @@ import logging
 import time
 from typing import Optional
 from app.config import (
-    LLM_MODEL, LLM_BASE_URL,
     LLM_CHUNKING, LLM_CHUNK_SIZE, LLM_CHUNK_OVERLAP, LLM_CHUNK_THRESHOLD
 )
 from app.llm import analyze_with_provider
-from app.llm.providers import detect_provider
 from app.text_processing import (
     extract_texts_and_mapping, mask_math_blocks,
     split_into_chunks, retry_missing_on_sentences
@@ -55,12 +53,11 @@ async def handle_check(
     # Mask LaTeX math to keep offsets stable and optionally suppress matches.
     # We currently suppress matches only inside block math ($$...$$) to allow
     # narrative inline math ($...$) corrections when desired.
-    logical_text_masked, math_block_ranges, math_inline_ranges = mask_math_blocks(logical_text)
+    _, math_block_ranges, _ = mask_math_blocks(logical_text)
 
     # Run LLM on LOGICAL text (without markup)
     # NOTE: We pass the ORIGINAL logical text without masking to allow LLM to see LaTeX formulas
     llm_matches = []
-    provider_for_chunking = detect_provider(LLM_MODEL, LLM_BASE_URL)
     threshold = max(LLM_CHUNK_THRESHOLD, LLM_CHUNK_SIZE)
     use_chunking = LLM_CHUNKING and len(logical_text) > threshold
 

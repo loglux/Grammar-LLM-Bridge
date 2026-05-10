@@ -30,20 +30,6 @@ class APIKey(BaseModel):
     expires_at: Optional[datetime] = None
 
 
-class UsageRecord(BaseModel):
-    """Usage tracking model."""
-    id: Optional[int] = None
-    user_id: int
-    api_key_id: Optional[int] = None
-    endpoint: str
-    request_tokens: int = 0
-    response_tokens: int = 0
-    total_tokens: int = 0
-    latency_ms: float = 0.0
-    status_code: int = 200
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-
-
 class UserCreate(BaseModel):
     """Schema for creating a new user."""
     username: str

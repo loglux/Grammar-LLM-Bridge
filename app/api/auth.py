@@ -73,7 +73,7 @@ async def login(credentials: LoginRequest, db: AsyncSession = Depends(get_db)):
         db,
         user_id=user.id,
         hashed_key=hashed_key,
-        name=f"Session key (login)",
+        name="Session key (login)",
         expires_in_days=30
     )
 

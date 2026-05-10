@@ -9,6 +9,7 @@ from fastapi.openapi.utils import get_openapi
 from app.config import LLM_MODEL
 from app.models import CheckRequest
 from app.api import v2_router, auth_router
+from app.auth.middleware import api_key_auth_middleware
 
 # Initialize FastAPI app
 app = FastAPI(title="Grammar-LLM-Bridge", version="2.0-json-schema")
@@ -24,7 +25,6 @@ app.add_middleware(
 
 # API Key authentication middleware (optional, backward compatible)
 # Validates X-API-Key header and sets request.state.user
-from app.auth.middleware import api_key_auth_middleware
 app.middleware("http")(api_key_auth_middleware)
 
 # Include routers

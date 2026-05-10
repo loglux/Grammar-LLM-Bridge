@@ -303,7 +303,7 @@ async def retry_missing_on_sentences(
                 timing["llm_ms"] = timing.get("llm_ms", 0.0) + (time.perf_counter() - llm_start) * 1000
                 timing["llm_calls"] = timing.get("llm_calls", 0) + 1
             aggregated.extend(resp or [])
-        except Exception as e:
+        except Exception:
             logger.exception("Retry failed for sentence")
 
     return aggregated
