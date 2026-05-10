@@ -1,6 +1,8 @@
-## LLM Filters & Prompting (current DeepSeek behaviour)
+## LLM Filters & Prompting
 
-### Backend / mode
+> **Snapshot as of December 2025.** This document captures the response patterns we observed when validating the original DeepSeek (`deepseek-chat`) integration, plus the post-processing filters that codify those observations. The filters themselves still live in [`../filters_and_behavior.md`](../filters_and_behavior.md); newer model behaviours (DeepSeek v4 family, GPT-5 family) may differ. Use as background, not as current spec.
+
+### Backend / mode (at the time of writing)
 - Model: `deepseek-chat` via `https://api.deepseek.com`, `GRAMMAR_ONLY=true`.
 - Prompt: JSON schema (`json_object`), minimal fragments, no overlaps, array only.
 

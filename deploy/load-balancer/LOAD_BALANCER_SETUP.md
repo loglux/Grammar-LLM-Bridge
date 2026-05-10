@@ -7,16 +7,12 @@ Current stack matches `docker-compose.yml` in this folder. Service names and por
 - `lb.conf` is the active nginx config. `default.conf` is intentionally empty/unused (keeps the default site disabled).
 
 ## Prepare env
-- `.env.bridge` (not committed) supplies backend secrets and flags, e.g.:
+- `.env.bridge` (not committed) supplies backend secrets and flags. Copy the template at the repo root and edit:
+  ```bash
+  cp ../../.env.example .env.bridge
+  $EDITOR .env.bridge   # set OPENAI_API_KEY, OPENAI_BASE_URL, LLM_MODEL, etc.
   ```
-  OPENAI_API_KEY=...
-  OPENAI_BASE_URL=https://api.deepseek.com
-  LLM_MODEL=deepseek-chat
-  GRAMMAR_ONLY=false
-  TYPOGRAPHY_CHECK=false
-  LLM_TIMEOUT=120
-  ```
-  If missing, create it before starting the stack.
+  [`.env.example`](../../.env.example) documents every variable (backend selection, chunking strategy, timeouts). Minimum to start: `OPENAI_API_KEY` + `OPENAI_BASE_URL` + `LLM_MODEL`.
 
 ## Run / restart
 From `deploy/load-balancer/` in the repo root:

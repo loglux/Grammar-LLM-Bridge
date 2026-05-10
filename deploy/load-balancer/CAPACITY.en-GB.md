@@ -176,7 +176,7 @@
 - No backup channel
 
 **Solution:**
-- Fallback to GPT-4o-mini (see MULTI_LLM_DESIGN.md)
+- Fallback to GPT-4o-mini (see ../../docs/research/MULTI_LLM_DESIGN.md)
 
 ---
 
@@ -197,7 +197,7 @@
 - Set up latency monitoring
 
 **Steps:**
-1. Implement fallback (MULTI_LLM_DESIGN.md, phase 1)
+1. Implement fallback (../../docs/research/MULTI_LLM_DESIGN.md, phase 1)
 2. Configure alert for latency >10s
 3. Reduce LLM_TIMEOUT to 60s
 4. Optional: increase workers to 8 per instance
@@ -226,7 +226,7 @@
 
 - [ ] Implement GPT-4o-mini fallback
   - Trigger: timeout >60s or latency >20s
-  - Implementation: see `MULTI_LLM_DESIGN.md`
+  - Implementation: see [`../../docs/research/MULTI_LLM_DESIGN.md`](../../docs/research/MULTI_LLM_DESIGN.md)
 
 - [ ] Monitor latency
   - Command: `docker logs grammar-llm-01 | grep "Latency" | grep "llm=[0-9]{4,}"`
@@ -247,7 +247,7 @@
   - Recommendation: 6-8 workers per instance (12-16 total)
 
 - [ ] Metrics logging
-  - File: append to app.py
+  - File: append to a module in `app/` (e.g. `app/handlers.py` for request-level metrics)
   - Metrics: req/min, latency p50/p95/p99, fallback rate
 
 ### Priority 3 - Optional
@@ -344,7 +344,7 @@ A: Only if monitoring shows consistent load >40 req/min and fallback is already 
 
 ## References
 
-- **Multi-LLM documentation:** `MULTI_LLM_DESIGN.md`
+- **Multi-LLM documentation:** [`../../docs/research/MULTI_LLM_DESIGN.md`](../../docs/research/MULTI_LLM_DESIGN.md)
 - **Balancer configuration:** `docker-compose.yml`, `lb.conf`
 - **DeepSeek API docs:** https://api-docs.deepseek.com/
 - **Logs:** `docker logs grammar-llm-01 --tail 100 -f`
