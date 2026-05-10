@@ -1,11 +1,9 @@
 # Grammar-LLM-Bridge
 
-> LanguageTool-compatible FastAPI server that bridges LT clients (Obsidian plugins, browser extensions, etc.) to **any OpenAI-compatible LLM backend** for grammar and spell checking.
-
 [![CI](https://github.com/loglux/Grammar-LLM-Bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/loglux/Grammar-LLM-Bridge/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Talks the `/v2/check` LanguageTool API on one side and OpenAI-compatible chat-completions on the other (OpenAI, DeepSeek, OpenRouter, Anthropic via OpenRouter, Ollama, ...). Drop it in front of any LT plugin and get LLM-quality grammar checks against the model of your choice.
+A FastAPI server that speaks the `/v2/check` LanguageTool API on one side and OpenAI-compatible chat-completions on the other (OpenAI, DeepSeek, OpenRouter, Anthropic via OpenRouter, Ollama, ...). Drop it in front of any LT client — Obsidian plugin, browser extension, custom integration — and get LLM-quality grammar checks against the model of your choice.
 
 Tested with the two main Obsidian LT plugins:
 
