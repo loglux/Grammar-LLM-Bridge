@@ -139,12 +139,20 @@ The LT plugin sends an annotated text (text + markup parts) to `/v2/check`. The 
 
 This is an **experimental** project tuned around English (en-GB / en-US is what the test suite covers). Mechanically the Bridge is language-agnostic — it forwards whatever `language` code the client sends (`ru-RU`, `de-DE`, `fr-FR`, ...) to the LLM, and modern multilingual models (DeepSeek, GPT-4.x, Claude, ...) will return grammar suggestions for that language.
 
-Caveat: the system prompt in `app/prompts.py` is built from English-centric guard blocks (subject–verb agreement, article rules, ESL hints). On other languages those rules either don't apply or produce a different false-positive profile. To get production-quality results in another language you'll likely want to:
+Two caveats — what is and isn't there:
 
-1. Adapt the prompt blocks for that language (or add a per-language overlay — `prompt_rules.md` documents the forbid/allow structure).
+- **Language parameter is plumbed through**: `GET /v2/languages` advertises en-US/GB/AU, ru-RU, de-DE, fr-FR, es-ES, and `auto`. The `language` field from the client is passed into the LLM prompt verbatim.
+- **System prompt is English-centric**: the rule blocks in `app/prompts.py` (subject–verb agreement, article rules, ESL hints) are written for English. On other languages they don't apply or produce a different false-positive profile.
+- **No real auto-detection yet**: sending `language=auto` just forwards the string to the LLM, which usually figures the language out on its own but without confidence guarantees. A comparison of candidate detectors (fastText/langid/cld3/langdetect) for a future implementation lives in [`docs/research/QA_LANGUAGE_DETECTION.md`](./docs/research/QA_LANGUAGE_DETECTION.md).
+
+To get production-quality results in another language you'll likely want to:
+
+1. Adapt the prompt blocks for that language (or add a per-language overlay — [`docs/prompt_rules.md`](./docs/prompt_rules.md) documents the forbid/allow structure).
 2. Run a small gold-suite (`qa-results/quality/`) for the target language to compare model outputs.
 
-See [`docs/prompt_rules.md`](./docs/prompt_rules.md), [`docs/LEVEL_MODES.md`](./docs/LEVEL_MODES.md), and [`docs/style_prompt_blocks.md`](./docs/style_prompt_blocks.md) for how prompts are composed and how `picky`/`default` modes inherit rules.
+See also [`docs/LEVEL_MODES.md`](./docs/LEVEL_MODES.md) for how `picky`/`default` modes inherit rules, and [`docs/style_prompt_blocks.md`](./docs/style_prompt_blocks.md) for style/toneTags presets.
+
+A concrete plan for splitting prompts into per-language modules (`app/prompts/en.py`, `ru.py`, `de.py`, ...) with a `get_prompt(language, mode)` dispatcher lives in [`ROADMAP.md`](./ROADMAP.md#language-support).
 
 ## Privacy
 
