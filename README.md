@@ -1,59 +1,108 @@
 # Grammar-LLM-Bridge
 
-LanguageTool-compatible FastAPI server bridging LT clients (Obsidian, etc.) to OpenAI-compatible LLM backends for grammar checking.
+> LanguageTool-compatible FastAPI server that bridges LT clients (Obsidian plugins, browser extensions, etc.) to **any OpenAI-compatible LLM backend** for grammar and spell checking.
 
-Tested with both popular Obsidian LT plugins:
+[![CI](https://github.com/loglux/Grammar-LLM-Bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/loglux/Grammar-LLM-Bridge/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-- [`Clemens-E/obsidian-languagetool-plugin`](https://github.com/Clemens-E/obsidian-languagetool-plugin) — the original.
-- [`wrenger/obsidian-languagetool`](https://github.com/wrenger/obsidian-languagetool) — a fork with its own markdown handling.
+Talks the `/v2/check` LanguageTool API on one side and OpenAI-compatible chat-completions on the other (OpenAI, DeepSeek, OpenRouter, Anthropic via OpenRouter, Ollama, ...). Drop it in front of any LT plugin and get LLM-quality grammar checks against the model of your choice.
 
-Both send `apiKey` and `username` in the request body (form-urlencoded); the Bridge's auth middleware accepts that flow.
+Tested with the two main Obsidian LT plugins:
 
-For local QA / operational notes (not in this repo): see `local/LOCAL_NOTES.md` and the `local/` directory.
+- [`Clemens-E/obsidian-languagetool-plugin`](https://github.com/Clemens-E/obsidian-languagetool-plugin) — the original (maintenance mode).
+- [`wrenger/obsidian-languagetool`](https://github.com/wrenger/obsidian-languagetool) — a more active fork.
+
+Both send `apiKey` and `username` in the request body (form-urlencoded); the Bridge's auth middleware understands that flow.
 
 ## Quick start
 
+### 1. Clone and configure
+
 ```bash
-source venv/bin/activate
-make help
+git clone https://github.com/loglux/Grammar-LLM-Bridge.git
+cd Grammar-LLM-Bridge
+cp .env.example deploy/load-balancer/.env.bridge
+$EDITOR deploy/load-balancer/.env.bridge       # set OPENAI_API_KEY etc.
 ```
 
-Common targets: `make build`, `make up` / `up-dev`, `make logs-01` / `logs-dev`, `make smoke`, `make quality MODEL=…`. Run `make help` for the full list.
+`.env.example` documents every variable, including aggressive-chunking options that reduce context-induced false positives.
+
+### 2. Build and run
+
+Production stack (nginx load-balancer + two app replicas, port `8081`):
+
+```bash
+make build         # docker build -t grammar-llm-bridge:latest .
+make up            # docker compose up -d
+make logs-01       # tail one replica's logs
+```
+
+Single dev instance on port `9019` (handy for the browser test UI below):
+
+```bash
+make up-dev
+make logs-dev
+```
+
+### 3. Point your client at it
+
+For an Obsidian LT plugin, set **Server URL** to:
+
+- `http://localhost:8081/v2/check` (LB) or
+- `http://localhost:9019/v2/check` (dev).
+
+`grammar-checker.html` in the repo root is a self-contained browser test UI — open it directly in a browser, no build step required.
+
+## Configuration knobs
+
+All via env vars (see `.env.example` for the canonical list):
+
+| Variable | Purpose |
+|---|---|
+| `OPENAI_API_KEY` / `OPENAI_BASE_URL` / `LLM_MODEL` | Backend selection (any OpenAI-compatible API). |
+| `GRAMMAR_ONLY` | If `true`, suppresses style/wordiness suggestions. |
+| `TYPOGRAPHY_CHECK` | Include typographic issues. |
+| `LLM_CHUNKING` / `LLM_CHUNK_SIZE` / `LLM_CHUNK_THRESHOLD` | Split long inputs into chunks (each its own LLM call). |
+| `LLM_CHUNK_STRATEGY` | `paragraph` (legacy) or `recursive` (LaTeX-safe, splits inside paragraphs by sentence to reduce false positives). |
+| `LLM_TIMEOUT` | Per-request timeout in seconds. |
 
 ## Layout
 
 | Path | Purpose |
 |---|---|
-| `app/` | Modular FastAPI package; entrypoint `app.main:app` |
-| `deploy/load-balancer/` | Production stack (nginx + 2 replicas + shared SQLite) |
-| `docs/` | Architecture, auth, prompt rules, level modes |
-| `docs/research/` | Background notes and design discussions |
-| `docs/qa/` | QA-observed model behaviour notes |
-| `qa-results/quality/` | Curated gold suites and quality runners |
-| `qa-results/ad-hoc/` | Sample inputs and ad-hoc tools (`run_samples.py`, `analyze_last_run.py`) |
-| `Makefile` | Build / run / logs / smoke / quality |
-| `local/` | Local-only notes (gitignored) |
+| `app/` | Modular FastAPI package; entrypoint `app.main:app`. |
+| `deploy/load-balancer/` | Production Docker Compose stack (nginx + 2 replicas + shared SQLite). |
+| `docs/` | Architecture, auth, prompt rules, level modes. |
+| `docs/research/` | Background notes and design discussions. |
+| `docs/qa/` | QA-observed model-behaviour notes. |
+| `qa-results/quality/` | Curated gold suites and quality runners. |
+| `qa-results/ad-hoc/` | Ad-hoc tools (`run_samples.py`, `analyze_last_run.py`) and sample texts. |
+| `tests/unit/` | Unit tests for the bridge (chunking, masking, mapping). |
+| `Makefile` | Build / run / logs / smoke / quality. |
+| `grammar-checker.html` | Self-contained browser test UI. |
 
-## Endpoints
-
-- Prod (load-balanced, 2 replicas): `http://localhost:8081/v2/check`
-- Dev profile (single instance): `http://localhost:9019/v2/check`
-
-## Browser test UI
-
-`grammar-checker.html` is a self-contained, single-file web UI for sending text to any LanguageTool-compatible `/v2/check` endpoint and viewing returned matches. No build step — just open the file in a browser.
-
-The default backend URL is `http://localhost:9019/v2/check` (Grammar-LLM-Bridge dev profile). You can point it at any other LT-compatible API by editing the field at the top of the page. A backend **is** required — the page is a thin client and doesn't perform any checking on its own.
+## Development
 
 ```bash
-make up-dev          # start the dev backend
-xdg-open grammar-checker.html   # or open it any way you like
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install ruff pytest
+
+ruff check app/ tests/       # lint
+pytest tests/ -v             # unit tests (currently 21)
 ```
 
-## Configuration
+CI runs the same `ruff` + `pytest` on every push to `master` against Python 3.11 and 3.12 — see [`.github/workflows/ci.yml`](./.github/workflows/ci.yml).
 
-Runtime configuration is injected via `deploy/load-balancer/.env.bridge` (gitignored, contains the API key and model selection). Never bake secrets into the Dockerfile or commit `.env*` files.
+## How it works (one paragraph)
+
+The LT plugin sends an annotated text (text + markup parts) to `/v2/check`. The Bridge extracts a *logical* text without markup, builds a position map, optionally splits the logical text into chunks, and asks the configured LLM to find grammar errors. The LLM's suggestions come back with offsets in logical-text space; the Bridge maps them back to the original markup-aware offsets the plugin expects, deduplicates overlapping spans, and returns an LT-compatible response. LaTeX math blocks are detected and protected so they aren't underlined and aren't cut in the middle by the chunker.
+
+## Privacy
+
+Your text is sent to whichever LLM provider you configure. If you'd rather keep everything on your machine, point the Bridge at a local Ollama (or similar) instance — same `OPENAI_BASE_URL` / `LLM_MODEL` pair, no external traffic.
 
 ## License
 
-[MIT](./LICENSE) © loglux.
+[MIT](./LICENSE) © loglux. Forks, PRs, and issue reports welcome.
