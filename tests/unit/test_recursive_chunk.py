@@ -7,7 +7,8 @@ through `protected_ranges` (used by Grammar-LLM-Bridge to keep LaTeX math
 blocks intact).
 """
 
-import pytest
+
+from itertools import pairwise
 
 from app.text_processing import recursive_chunk
 
@@ -62,10 +63,10 @@ class TestOverlap:
         text = "AAA.\n\nBBB.\n\nCCC."  # 3 paragraphs
         chunks = recursive_chunk(text, max_len=5, overlap=2)
         # First chunk: no left overlap; last chunk: no right overlap.
-        first_text, first_start, first_a_s, first_a_e = chunks[0]
+        _, first_start, first_a_s, _ = chunks[0]
         assert first_start == 0
         assert first_a_s == 0
-        last_text, last_start, last_a_s, last_a_e = chunks[-1]
+        _, _, _, last_a_e = chunks[-1]
         assert last_a_e == len(text)
 
 
@@ -116,5 +117,5 @@ class TestEdgeCases:
         anchors = _anchors(chunks)
         assert anchors[0][0] == 0
         assert anchors[-1][1] == len(text)
-        for (_, e1), (s2, _) in zip(anchors, anchors[1:]):
+        for (_, e1), (s2, _) in pairwise(anchors):
             assert e1 == s2, f"anchors must tile: {e1} != {s2}"

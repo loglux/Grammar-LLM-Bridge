@@ -6,7 +6,6 @@ Unit tests for the core text-processing helpers:
   logical_text, mapping[logical_pos]→original_pos).
 """
 
-import pytest
 
 from app.text_processing import mask_math_blocks, extract_texts_and_mapping
 
