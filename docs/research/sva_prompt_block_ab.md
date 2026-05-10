@@ -1,3 +1,8 @@
+
+> **[Historical — Dec 2025 A/B]** Result of comparing the SVA guard block on/off
+> across DeepSeek and OpenAI. Conclusions fed into the current
+> `app/prompts.py` (the SVA_BLOCK lives there). Kept for reference.
+
 # Subject–Verb Agreement Prompt Update (Dec 21, 2025)
 
 ## What changed

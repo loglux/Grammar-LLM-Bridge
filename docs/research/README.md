@@ -55,3 +55,5 @@ For current architecture and operational docs, see [`../architecture/`](../archi
 ## Project history
 
 - [REFACTORING.md](REFACTORING.md) — [historical, 2025-12-28] the monolith-to-modules refactor. Useful for archaeology; the current layout is in [`../architecture/MODULE_STRUCTURE.md`](../architecture/MODULE_STRUCTURE.md).
+- [level_modes_plan.md](level_modes_plan.md) — [historical, 2025-12] design discussion that produced the `default`/`picky` mode behaviour. Canonical reference today is [`../LEVEL_MODES.md`](../LEVEL_MODES.md).
+- [sva_prompt_block_ab.md](sva_prompt_block_ab.md) — [historical, 2025-12 A/B] result of toggling the SVA guard block across DeepSeek and OpenAI models. The block now lives in `app/prompts.py`.

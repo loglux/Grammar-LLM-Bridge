@@ -1,3 +1,10 @@
+
+> **[Historical — Dec 2025]** This document captured the design discussion that
+> shaped `level=default/picky`. The behaviour is now implemented and the
+> canonical reference is [`../LEVEL_MODES.md`](../LEVEL_MODES.md). Kept here
+> for archaeology — decision points, alternatives weighed, and the original
+> prompt sketch live below.
+
 # Standard vs Picky Modes Plan (Grammar Checking)
 
 ## Goal
