@@ -73,6 +73,37 @@ All via env vars (see `.env.example` for the canonical list):
 | `LLM_CHUNK_STRATEGY` | `paragraph` (legacy) or `recursive` (LaTeX-safe, splits inside paragraphs by sentence to reduce false positives). |
 | `LLM_TIMEOUT` | Per-request timeout in seconds. |
 
+## Production topology
+
+The `deploy/load-balancer/` stack runs three containers behind one host port:
+
+```
+                ┌──────────────────────────────┐
+host :8081 ─────▶ grammar-llm-balancer (nginx) │   round-robin
+                └──────┬──────────────┬────────┘
+                       │              │
+                       ▼              ▼
+              grammar-llm-01    grammar-llm-02
+               (FastAPI/        (FastAPI/
+                uvicorn 4w)      uvicorn 4w)
+                       │              │
+                       └─────┬────────┘
+                             ▼
+                  shared SQLite (bind mount `./data`,
+                  DATABASE_URL=sqlite+aiosqlite:///…)
+```
+
+- `nginx` listens on **`:8081`** and round-robins between the two replicas (no host ports on the replicas themselves — they are reachable only inside the docker network).
+- Each replica is `grammar-llm-bridge:latest` running `uvicorn app.main:app --workers 4`.
+- A separate `grammar-llm-dev` profile exposes a single replica on **`:9019`** for local testing (`make up-dev`).
+- LLM API calls are stateless; auth state and rate-limiter counters live in the shared SQLite file so both replicas see the same `apiKey` records.
+
+For details (network config, fixed IPs, capacity planning) see:
+
+- [`deploy/load-balancer/LOAD_BALANCER_SETUP.md`](./deploy/load-balancer/LOAD_BALANCER_SETUP.md) — concrete setup steps.
+- [`deploy/load-balancer/NETWORK_NOTES.md`](./deploy/load-balancer/NETWORK_NOTES.md) — `extra_hosts` workaround, DNS notes.
+- [`deploy/load-balancer/CAPACITY.en-GB.md`](./deploy/load-balancer/CAPACITY.en-GB.md) — throughput math and recommended limits.
+
 ## Layout
 
 | Path | Purpose |
