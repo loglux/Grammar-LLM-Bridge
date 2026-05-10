@@ -7,12 +7,13 @@ import logging
 import time
 from typing import Optional
 from app.config import (
-    LLM_CHUNKING, LLM_CHUNK_SIZE, LLM_CHUNK_OVERLAP, LLM_CHUNK_THRESHOLD
+    LLM_CHUNKING, LLM_CHUNK_SIZE, LLM_CHUNK_OVERLAP, LLM_CHUNK_THRESHOLD,
+    LLM_CHUNK_STRATEGY,
 )
 from app.llm import analyze_with_provider
 from app.text_processing import (
     extract_texts_and_mapping, mask_math_blocks,
-    split_into_chunks, retry_missing_on_sentences
+    split_into_chunks, recursive_chunk, retry_missing_on_sentences
 )
 from app.error_finder import find_error_positions_in_logical
 from app.position_mapper import (
@@ -53,7 +54,7 @@ async def handle_check(
     # Mask LaTeX math to keep offsets stable and optionally suppress matches.
     # We currently suppress matches only inside block math ($$...$$) to allow
     # narrative inline math ($...$) corrections when desired.
-    _, math_block_ranges, _ = mask_math_blocks(logical_text)
+    _, math_block_ranges, math_inline_ranges = mask_math_blocks(logical_text)
 
     # Run LLM on LOGICAL text (without markup)
     # NOTE: We pass the ORIGINAL logical text without masking to allow LLM to see LaTeX formulas
@@ -63,8 +64,21 @@ async def handle_check(
 
     chunk_offsets: list[tuple[str, int, int, int]] = []
     if use_chunking:
-        chunk_offsets = split_into_chunks(logical_text, LLM_CHUNK_SIZE, overlap=LLM_CHUNK_OVERLAP)
-        logger.info("Checking logical text with LLM in %d chunk(s)...", len(chunk_offsets))
+        if LLM_CHUNK_STRATEGY == "recursive":
+            chunk_offsets = recursive_chunk(
+                logical_text,
+                LLM_CHUNK_SIZE,
+                overlap=LLM_CHUNK_OVERLAP,
+                protected_ranges=math_block_ranges + math_inline_ranges,
+            )
+        else:
+            chunk_offsets = split_into_chunks(
+                logical_text, LLM_CHUNK_SIZE, overlap=LLM_CHUNK_OVERLAP
+            )
+        logger.info(
+            "Checking logical text with LLM in %d chunk(s) [strategy=%s]...",
+            len(chunk_offsets), LLM_CHUNK_STRATEGY,
+        )
         llm_start = time.perf_counter()
         chunk_results = await asyncio.gather(
             *(analyze_with_provider(c, language, level) for c, _, _, _ in chunk_offsets)

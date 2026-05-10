@@ -257,6 +257,162 @@ def split_into_chunks(text: str, max_len: int, overlap: int = 0) -> list[tuple[s
     return [(text[s:e], s, a_s, a_e) for s, e, a_s, a_e in chunk_ranges]
 
 
+def recursive_chunk(
+    text: str,
+    max_len: int,
+    overlap: int = 0,
+    protected_ranges: Optional[list[tuple[int, int]]] = None,
+    separators: Optional[list[str]] = None,
+) -> list[tuple[str, int, int, int]]:
+    """
+    Recursive character splitter inspired by LangChain's
+    RecursiveCharacterTextSplitter but self-contained (no external dep).
+
+    Splits text by a hierarchy of separators, falling back to coarser ones
+    when a piece is still over `max_len`:
+        "\\n\\n" → "\\n" → ". " → " " → "" (char level)
+
+    Optionally avoids cutting through `protected_ranges` (e.g. math blocks
+    from mask_math_blocks). If a candidate cut falls inside a protected
+    range, the cut is pushed past the range's end (the affected chunk may
+    exceed `max_len` — preferred to a broken formula).
+
+    Returns list of `(chunk_text, chunk_start, anchor_start, anchor_end)`
+    tuples, matching the contract of split_into_chunks(): anchor is the
+    range without overlap (used for dedup); chunk_start..chunk_start+len
+    includes overlap on both sides.
+    """
+    if len(text) <= max_len:
+        return [(text, 0, 0, len(text))]
+
+    if separators is None:
+        separators = ["\n\n", "\n", ". ", " ", ""]
+    protected = protected_ranges or []
+
+    anchors = _recursive_anchors(text, max_len, separators, protected, 0)
+
+    # Apply overlap and respect protected ranges on the extended edges.
+    n = len(text)
+    chunks: list[tuple[str, int, int, int]] = []
+    for i, (a_s, a_e) in enumerate(anchors):
+        s = a_s if i == 0 else max(0, a_s - overlap)
+        e = a_e if i == len(anchors) - 1 else min(n, a_e + overlap)
+        s = _push_out_of_protected(s, protected, direction=-1)
+        e = _push_out_of_protected(e, protected, direction=+1)
+        chunks.append((text[s:e], s, a_s, a_e))
+    return chunks
+
+
+def _recursive_anchors(
+    text: str,
+    max_len: int,
+    separators: list[str],
+    protected: list[tuple[int, int]],
+    base_offset: int,
+) -> list[tuple[int, int]]:
+    """Return (start, end) anchor ranges in absolute offsets."""
+    n = len(text)
+    if n <= max_len:
+        return [(base_offset, base_offset + n)]
+
+    for i, sep in enumerate(separators):
+        if sep == "":
+            return _hard_char_split(text, max_len, base_offset, protected)
+        if sep not in text:
+            continue
+
+        # Split keeping separator at the end of each part (so we don't lose it).
+        parts: list[tuple[int, int]] = []  # (start_in_text, end_in_text)
+        idx = 0
+        while idx < n:
+            j = text.find(sep, idx)
+            if j == -1:
+                parts.append((idx, n))
+                break
+            parts.append((idx, j + len(sep)))
+            idx = j + len(sep)
+
+        anchors: list[tuple[int, int]] = []
+        cur_s: Optional[int] = None
+        cur_e: Optional[int] = None
+        for p_s, p_e in parts:
+            p_len = p_e - p_s
+            if p_len > max_len:
+                if cur_s is not None:
+                    anchors.append((base_offset + cur_s, base_offset + cur_e))
+                    cur_s = cur_e = None
+                anchors.extend(
+                    _recursive_anchors(text[p_s:p_e], max_len, separators[i + 1:], protected, base_offset + p_s)
+                )
+                continue
+            if cur_s is None:
+                cur_s, cur_e = p_s, p_e
+                continue
+            if (cur_e - cur_s) + p_len <= max_len:
+                cur_e = p_e
+            else:
+                anchors.append((base_offset + cur_s, base_offset + cur_e))
+                cur_s, cur_e = p_s, p_e
+        if cur_s is not None:
+            anchors.append((base_offset + cur_s, base_offset + cur_e))
+
+        # Repair boundaries that fall inside protected ranges by extending.
+        return _merge_protected(anchors, protected)
+
+    return _hard_char_split(text, max_len, base_offset, protected)
+
+
+def _hard_char_split(
+    text: str, max_len: int, base_offset: int, protected: list[tuple[int, int]]
+) -> list[tuple[int, int]]:
+    """Last-resort char-level split when no separator helps."""
+    anchors: list[tuple[int, int]] = []
+    n = len(text)
+    pos = 0
+    while pos < n:
+        end = min(n, pos + max_len)
+        end_abs = _push_out_of_protected(base_offset + end, protected, direction=+1)
+        end = end_abs - base_offset
+        anchors.append((base_offset + pos, base_offset + end))
+        pos = end
+    return anchors
+
+
+def _push_out_of_protected(
+    pos: int, protected: list[tuple[int, int]], direction: int
+) -> int:
+    """If `pos` is inside any protected range, push to the range edge.
+    `direction`: +1 = move forward (use end), -1 = move backward (use start)."""
+    for s, e in protected:
+        if s < pos < e:
+            return e if direction >= 0 else s
+    return pos
+
+
+def _merge_protected(
+    anchors: list[tuple[int, int]], protected: list[tuple[int, int]]
+) -> list[tuple[int, int]]:
+    """Merge consecutive anchors whose boundary falls inside a protected range."""
+    if not protected or len(anchors) < 2:
+        return anchors
+    merged: list[tuple[int, int]] = []
+    i = 0
+    while i < len(anchors):
+        s, e = anchors[i]
+        # If the right edge falls inside a protected range, extend by absorbing
+        # the next anchor(s) until we are past the range.
+        while i + 1 < len(anchors):
+            inside = any(rs < e < re for rs, re in protected)
+            if not inside:
+                break
+            ns, ne = anchors[i + 1]
+            e = max(e, ne)
+            i += 1
+        merged.append((s, e))
+        i += 1
+    return merged
+
+
 async def retry_missing_on_sentences(
     logical_text: str, missing_matches: list, language: str, level: str, timing: Optional[dict] = None
 ) -> list:

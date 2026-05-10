@@ -34,3 +34,7 @@ LLM_CHUNKING = os.getenv("LLM_CHUNKING", "true").lower() == "true"
 LLM_CHUNK_SIZE = int(os.getenv("LLM_CHUNK_SIZE", "600"))
 LLM_CHUNK_OVERLAP = int(os.getenv("LLM_CHUNK_OVERLAP", "60"))
 LLM_CHUNK_THRESHOLD = int(os.getenv("LLM_CHUNK_THRESHOLD", "1200"))
+# Strategy: "paragraph" (legacy: paragraph-aware with sentence-fallback for
+# oversized paragraphs) or "recursive" (recursive char splitter, hierarchical
+# separators \\n\\n → \\n → ". " → " ", respects math-block ranges).
+LLM_CHUNK_STRATEGY = os.getenv("LLM_CHUNK_STRATEGY", "paragraph")
