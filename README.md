@@ -135,6 +135,8 @@ CI runs the same `ruff` + `pytest` on every push to `master` against Python 3.11
 
 The LT plugin sends an annotated text (text + markup parts) to `/v2/check`. The Bridge extracts a *logical* text without markup, builds a position map, optionally splits the logical text into chunks, and asks the configured LLM to find grammar errors. The LLM's suggestions come back with offsets in logical-text space; the Bridge maps them back to the original markup-aware offsets the plugin expects, deduplicates overlapping spans, and returns an LT-compatible response. LaTeX math blocks are detected and protected so they aren't underlined and aren't cut in the middle by the chunker.
 
+The system prompt is composed from small forbid/allow blocks — we call it a *semantic firewall*: default is "be restrained" (no style rewrites, skip math, no quote-style changes, etc.), then specific blocks explicitly re-open high-value error classes (e.g. missing articles must be reported). Adding a new rule means following the same shape. Details: [`docs/prompt_rules.md`](./docs/prompt_rules.md).
+
 ## Languages
 
 This is an **experimental** project tuned around English (en-GB / en-US is what the test suite covers). Mechanically the Bridge is language-agnostic — it forwards whatever `language` code the client sends (`ru-RU`, `de-DE`, `fr-FR`, ...) to the LLM, and modern multilingual models (DeepSeek, GPT-4.x, Claude, ...) will return grammar suggestions for that language.

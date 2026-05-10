@@ -1,4 +1,17 @@
-# Prompt Rules (DeepSeek json_object) – Internal
+# Prompt Rules
+
+## Design: prompt as a semantic firewall
+
+The system prompt is built from blocks in `app/prompts.py` that fall into two roles, deliberately ordered:
+
+1. **Forbid / Guard** — narrow the model's behaviour. SVA guard, "no style/quote rewrites", "skip inside `$…$`", minimal-fragment discipline. These reduce noise.
+2. **Allow / Require** — explicitly re-open a few high-value error classes that a strict reading of the forbid block would suppress (e.g. missing determiners before singular countable nouns).
+
+We treat this pattern as a *semantic firewall*: by default the model is restrained, then specific "ports" are opened for the error types we actually want. New rules should be added in the same shape — a new forbid block needs at least an allow companion if it would block a useful class of corrections, and a new allow block should be narrow enough not to re-introduce style/tone noise.
+
+`MODE_BLOCK` (level=default/picky) tunes how strict the rest of the chain is; it doesn't replace the firewall, just adjusts its sensitivity. Per-language modules planned in [`../ROADMAP.md`](../ROADMAP.md#language-support) will follow the same forbid/allow shape.
+
+The lists below are the current state of the firewall. Update them whenever a prompt block in `app/prompts.py` changes.
 
 ## Forbid / Guard
 - **Style/quotes:** No style/tone rewrites. Ignore straight vs curly quotes/apostrophes unless it is a grammar error; do not switch quote styles.
