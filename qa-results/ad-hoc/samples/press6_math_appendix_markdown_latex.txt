@@ -1,0 +1,5 @@
+### Appendix: Fare estimate
+
+The report states that the fare is calculated by the formula $c = 15x + 130$, where $x$ is the number of miles.
+
+In Figure 1, the gradients of the lines $y=15x+130$ and $y=20x+35$ represent the cost per person. This sentence ends here.. The next sentence starts with lower-case where it should not.

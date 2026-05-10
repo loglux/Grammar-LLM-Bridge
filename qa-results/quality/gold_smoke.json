@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "id": "smoke1-sv",
+      "language": "en-GB",
+      "text": "She do not like apples.",
+      "expected": [
+        {"error_text": "do", "accept": ["does"]}
+      ]
+    },
+    {
+      "id": "smoke2-spelling",
+      "language": "en-GB",
+      "text": "He has a adress on file.",
+      "expected": [
+        {"error_text": "adress", "accept": ["address"]}
+      ]
+    },
+    {
+      "id": "smoke3-inline-math",
+      "language": "en-GB",
+      "text": "This formula $f(x)=x^2$ are incorrect.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "smoke4-block-math",
+      "language": "en-GB",
+      "text": "If we draw the graph for the function $$ y=-0.02 x^{2}+1.5 x+1.4 $$ the y-intercept represents the initial height of the ball.",
+      "expected": []
+    },
+    {
+      "id": "smoke5-punctuation",
+      "language": "en-GB",
+      "text": "She left early. and returned before noon.",
+      "expected": [
+        {"error_text": "early. and", "accept_contains": [", and", "early and"], "accept": ["early, and", "early and"]}
+      ]
+    }
+  ]
+}

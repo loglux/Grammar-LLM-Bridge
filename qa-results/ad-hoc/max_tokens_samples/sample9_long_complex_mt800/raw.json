@@ -1,0 +1,28 @@
+{
+  "id": "6d2ca1f8-59ba-451d-85e4-6f5e014aea41",
+  "object": "chat.completion",
+  "created": 1766008736,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"highlights\", \"replacements\": [\"highlight\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"demonstrates\", \"replacements\": [\"demonstrate\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"emphasises\", \"replacements\": [\"emphasise\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"notes\", \"replacements\": [\"note\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"provides\", \"replacements\": [\"provide\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"identifies\", \"replacements\": [\"identify\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"demands\", \"replacements\": [\"demand\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"advocates\", \"replacements\": [\"advocate\"]}\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 670,
+    "completion_tokens": 230,
+    "total_tokens": 900,
+    "prompt_tokens_details": {
+      "cached_tokens": 640
+    },
+    "prompt_cache_hit_tokens": 640,
+    "prompt_cache_miss_tokens": 30
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

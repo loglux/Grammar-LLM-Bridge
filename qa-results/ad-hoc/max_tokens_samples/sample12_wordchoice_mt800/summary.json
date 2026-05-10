@@ -1,0 +1,7 @@
+{
+  "sample": "sample12_wordchoice.txt",
+  "max_tokens": 800,
+  "elapsed_sec": 4.89,
+  "json_error": null,
+  "errors_count": 2
+}

@@ -1,0 +1,28 @@
+{
+  "id": "3f9112c8-ad7b-4b96-b5f1-6a535c265891",
+  "object": "chat.completion",
+  "created": 1766008656,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Missing comma after introductory phrase\",\n        \"error_text\": \"In the end we\",\n        \"replacements\": [\"In the end, we\"]\n    },\n    {\n        \"message\": \"Word repetition - consider using synonyms for variety\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"conclusion\", \"finale\", \"termination\", \"culmination\"]\n    },\n    {\n        \"message\": \"Word repetition - consider using synonyms for variety\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"outcome\", \"result\", \"conclusion\", \"final product\"]\n    },\n    {\n        \"message\": \"Word repetition - consider using synonyms for variety\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"conclusion\", \"finish\", \"termination\", \"close\"]\n    },\n    {\n        \"message\": \"Comma splice - consider using a period or semicolon instead\",\n        \"error_text\": \"comma, and\",\n        \"replacements\": [\"comma. And\", \"comma; and\"]\n    },\n    {\n        \"message\": \"Missing period at end of sentence\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"end.\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 609,
+    "completion_tokens": 268,
+    "total_tokens": 877,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 33
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

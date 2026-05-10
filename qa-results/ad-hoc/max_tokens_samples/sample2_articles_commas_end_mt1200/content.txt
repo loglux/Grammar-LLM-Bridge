@@ -1,0 +1,17 @@
+[
+    {
+        "message": "Missing article before countable noun",
+        "error_text": "In office",
+        "replacements": ["In the office", "In an office"]
+    },
+    {
+        "message": "Missing comma in introductory phrase",
+        "error_text": "At the end we",
+        "replacements": ["At the end, we"]
+    },
+    {
+        "message": "Missing period at sentence end",
+        "error_text": "without a period",
+        "replacements": ["without a period."]
+    }
+]

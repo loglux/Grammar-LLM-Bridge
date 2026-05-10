@@ -1,0 +1,17 @@
+[
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "are",
+        "replacements": ["is"]
+    },
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "was",
+        "replacements": ["were"]
+    },
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "is",
+        "replacements": ["are"]
+    }
+]

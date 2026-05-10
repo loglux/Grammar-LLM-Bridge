@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+.venv/
+
+# Environment files — never commit (contain API keys)
+.env
+.env.*
+!.env.example
+
+# Local-only notes, drafts, profiles
+local/
+
+# Agent instructions — local to each developer's environment
+/CLAUDE.md
+/AGENTS.md
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Per-developer Claude Code config
+.claude/
+
+# Container runtime data (SQLite, etc.)
+deploy/load-balancer/data/
+
+# Backup / scratch artefacts
+*.bak
+*.backup
+*.backup-*
+
+# QA ad-hoc runs (timestamped outputs — keep tools and samples, drop runs)
+qa-results/ad-hoc/run-*/
+qa-results/ad-hoc/latency-run-*/
+qa-results/ad-hoc/latency-*.png
+qa-results/ad-hoc/latency-*.csv
+qa-results/ad-hoc/latency-*.json
+qa-results/ad-hoc/latency-*.txt
+qa-results/ad-hoc/sva-ab-*/
+qa-results/ad-hoc/marker-suite-*/
+qa-results/ad-hoc/marker-test-*/
+qa-results/ad-hoc/stress-test-*.json
+qa-results/ad-hoc/stress_test_*.json
+qa-results/ad-hoc/long_sleep_*.json
+qa-results/ad-hoc/prompt-split-test/
+qa-results/ad-hoc/prompt_compare_*/
+
+# QA quality ephemeral runs (keep gold_* and *.py)
+qa-results/quality/run-*/
+qa-results/quality/punct-run-*/
+qa-results/quality/prompt_compare_*/
+qa-results/quality/category_compare_*/
+qa-results/quality/long_text_response.json

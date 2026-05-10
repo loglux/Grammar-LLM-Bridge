@@ -1,0 +1,28 @@
+{
+  "id": "b3c199a7-10c6-420c-be41-cb0dfdb94a35",
+  "object": "chat.completion",
+  "created": 1766008633,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Missing comma after introductory phrase\",\n        \"error_text\": \"In the end we\",\n        \"replacements\": [\"In the end, we\"]\n    },\n    {\n        \"message\": \"Word repetition - 'end' appears multiple times in close proximity\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"conclusion\", \"outcome\", \"result\", \"finale\"]\n    },\n    {\n        \"message\": \"Word repetition - 'end' appears multiple times in close proximity\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"conclusion\", \"outcome\", \"result\", \"finale\"]\n    },\n    {\n        \"message\": \"Word repetition - 'end' appears multiple times in close proximity\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"conclusion\", \"outcome\", \"result\", \"finale\"]\n    },\n    {\n        \"message\": \"Word repetition - 'end' appears multiple times in close proximity\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"conclusion\", \"outcome\", \"result\", \"finale\"]\n    },\n    {\n        \"message\": \"Word repetition - 'end' appears multiple times in close proximity\",\n        \"error_text\": \"end\",\n        \"replacements\": [\"conclusion\", \"outcome\", \"result\", \"finale\"]\n    },\n    {\n        \"message\": \"Missing period at end of sentence\",\n        \"error_text\": \"end\\n\",\n        \"replacements\": [\"end.\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 609,
+    "completion_tokens": 328,
+    "total_tokens": 937,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 97
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

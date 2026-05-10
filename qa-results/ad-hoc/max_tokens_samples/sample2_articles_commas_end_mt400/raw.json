@@ -1,0 +1,28 @@
+{
+  "id": "6efb2175-7588-4e62-97a4-2263746436d5",
+  "object": "chat.completion",
+  "created": 1766008607,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Missing article before countable noun\",\n        \"error_text\": \"In office\",\n        \"replacements\": [\"In the office\", \"In an office\"]\n    },\n    {\n        \"message\": \"Missing punctuation at sentence end\",\n        \"error_text\": \"without a period\",\n        \"replacements\": [\"without a period.\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 604,
+    "completion_tokens": 81,
+    "total_tokens": 685,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 92
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

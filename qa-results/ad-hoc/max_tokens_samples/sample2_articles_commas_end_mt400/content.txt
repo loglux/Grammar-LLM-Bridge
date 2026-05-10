@@ -1,0 +1,12 @@
+[
+    {
+        "message": "Missing article before countable noun",
+        "error_text": "In office",
+        "replacements": ["In the office", "In an office"]
+    },
+    {
+        "message": "Missing punctuation at sentence end",
+        "error_text": "without a period",
+        "replacements": ["without a period."]
+    }
+]

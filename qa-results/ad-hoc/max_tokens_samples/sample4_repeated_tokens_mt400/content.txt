@@ -1,0 +1,37 @@
+[
+    {
+        "message": "Missing comma after introductory phrase",
+        "error_text": "In the end we",
+        "replacements": ["In the end, we"]
+    },
+    {
+        "message": "Word repetition - 'end' appears multiple times in close proximity",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Word repetition - 'end' appears multiple times in close proximity",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Word repetition - 'end' appears multiple times in close proximity",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Word repetition - 'end' appears multiple times in close proximity",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Word repetition - 'end' appears multiple times in close proximity",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Missing period at end of sentence",
+        "error_text": "end\n",
+        "replacements": ["end."]
+    }
+]

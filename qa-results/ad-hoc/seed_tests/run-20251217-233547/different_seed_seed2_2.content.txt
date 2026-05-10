@@ -1,0 +1,8 @@
+[
+  {"message": "Spelling error", "error_text": "furnitured", "replacements": ["furnished"]},
+  {"message": "Incorrect use of em dash spacing", "error_text": "-- dashes --", "replacements": ["—dashes—", "— dashes —"]},
+  {"message": "Incorrect apostrophe usage", "error_text": "it's", "replacements": ["its"]},
+  {"message": "Currency symbol placement error", "error_text": "35£", "replacements": ["£35"]},
+  {"message": "Missing capitalisation at start of sentence", "error_text": "the sentence", "replacements": ["The sentence"]},
+  {"message": "Incorrect punctuation with double dots", "error_text": "ends..", "replacements": ["ends.", "ends..."]}
+]

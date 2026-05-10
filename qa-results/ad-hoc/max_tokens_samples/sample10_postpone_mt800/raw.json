@@ -1,0 +1,28 @@
+{
+  "id": "dbcb8e38-2b5d-4c80-bc58-a25c2b438f03",
+  "object": "chat.completion",
+  "created": 1766008565,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Subject-verb agreement error\",\n        \"error_text\": \"postpones\",\n        \"replacements\": [\"postponed\"]\n    },\n    {\n        \"message\": \"Subject-verb agreement error\",\n        \"error_text\": \"argues\",\n        \"replacements\": [\"argued\"]\n    },\n    {\n        \"message\": \"Subject-verb agreement error\",\n        \"error_text\": \"points\",\n        \"replacements\": [\"pointed\"]\n    },\n    {\n        \"message\": \"Word choice - consider more precise alternatives\",\n        \"error_text\": \"resets\",\n        \"replacements\": [\"revised\", \"adjusted\", \"modified\", \"recalibrated\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 623,
+    "completion_tokens": 153,
+    "total_tokens": 776,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 47
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

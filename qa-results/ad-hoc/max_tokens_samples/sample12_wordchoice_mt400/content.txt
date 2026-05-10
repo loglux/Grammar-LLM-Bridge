@@ -1,0 +1,7 @@
+[
+  {
+    "message": "Word choice - consider more precise alternatives",
+    "error_text": "suppose",
+    "replacements": ["believe", "think", "argue", "suggest"]
+  }
+]

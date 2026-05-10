@@ -1,0 +1,12 @@
+[
+  {
+    "message": "Word choice - 'states' is less formal; consider alternatives for professional writing",
+    "error_text": "states",
+    "replacements": ["claims", "asserts", "indicates", "says"]
+  },
+  {
+    "message": "Word choice - 'suppose' is informal or less precise here; consider alternatives",
+    "error_text": "suppose",
+    "replacements": ["argue", "believe", "contend", "suggest"]
+  }
+]

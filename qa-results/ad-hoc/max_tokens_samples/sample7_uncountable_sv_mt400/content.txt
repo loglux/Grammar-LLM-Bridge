@@ -1,0 +1,12 @@
+[
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "states",
+        "replacements": ["state"]
+    },
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "shows",
+        "replacements": ["show"]
+    }
+]

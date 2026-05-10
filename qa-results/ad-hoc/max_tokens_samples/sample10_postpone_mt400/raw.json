@@ -1,0 +1,28 @@
+{
+  "id": "95363433-a446-451e-9b77-b5d9f8d0cff5",
+  "object": "chat.completion",
+  "created": 1766008561,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"postpones\", \"replacements\": [\"postponed\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"argues\", \"replacements\": [\"argued\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"points\", \"replacements\": [\"point\"]},\n    {\"message\": \"Word choice - consider more precise alternatives\", \"error_text\": \"resets\", \"replacements\": [\"revised\", \"adjusted\", \"modified\"]}\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 623,
+    "completion_tokens": 126,
+    "total_tokens": 749,
+    "prompt_tokens_details": {
+      "cached_tokens": 320
+    },
+    "prompt_cache_hit_tokens": 320,
+    "prompt_cache_miss_tokens": 303
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

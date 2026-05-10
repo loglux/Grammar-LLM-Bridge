@@ -1,0 +1,7 @@
+{
+  "sample": "sample6_contractions_quotes.txt",
+  "max_tokens": 400,
+  "elapsed_sec": 5.1,
+  "json_error": null,
+  "errors_count": 4
+}

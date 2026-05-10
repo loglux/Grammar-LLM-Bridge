@@ -1,0 +1,188 @@
+{
+  "cases": [
+    {
+      "id": "case1-basic-sv-spelling",
+      "language": "en-GB",
+      "text": "She do not like apples. He have no idea why. The adress on the form was wrong.",
+      "expected": [
+        {"error_text": "do", "accept": ["does", "does not"]},
+        {"error_text": "have", "accept": ["has"]},
+        {"error_text": "adress", "accept": ["address"]}
+      ]
+    },
+    {
+      "id": "case2-basic-sv",
+      "language": "en-GB",
+      "text": "I seen it yesterday and we was surprised. There is many reasons for this. The report was clear.",
+      "expected": [
+        {"error_text": "seen", "accept": ["saw"]},
+        {"error_text": "was", "accept": ["were"]},
+        {"error_text": "is", "accept": ["are"]}
+      ]
+    },
+    {
+      "id": "case3-plurals",
+      "language": "en-GB",
+      "text": "The reports shows a clear trend, but the summary is fine. The committee members debates every proposal. Several analysts notes the same issue.",
+      "expected": [
+        {"error_text": "shows", "accept": ["show"]},
+        {"error_text": "debates", "accept": ["debate"]},
+        {"error_text": "notes", "accept": ["note"]}
+      ]
+    },
+    {
+      "id": "case4-dont",
+      "language": "en-GB",
+      "text": "He don't know the answer and she don't care.",
+      "expected": [
+        {"error_text": "don't", "accept": ["doesn't"]}
+      ]
+    },
+    {
+      "id": "case5-uncountable",
+      "language": "en-GB",
+      "text": "The information are incorrect and the advice were ignored.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]},
+        {"error_text": "were", "accept": ["was"]}
+      ]
+    },
+    {
+      "id": "case6-tense-plural",
+      "language": "en-GB",
+      "text": "She has went to the market and bought two loafs.",
+      "expected": [
+        {"error_text": "went", "error_text_alt": ["has went"], "accept": ["gone"], "accept_contains": ["gone"]},
+        {"error_text": "loafs", "accept": ["loaves"]}
+      ]
+    },
+    {
+      "id": "case7-spelling-sv",
+      "language": "en-GB",
+      "text": "They was late, and the buss arrived after midnight.",
+      "expected": [
+        {"error_text": "was", "accept": ["were"]},
+        {"error_text": "buss", "accept": ["bus"]}
+      ]
+    },
+    {
+      "id": "case8-there-is",
+      "language": "en-GB",
+      "text": "There is several options available for the client.",
+      "expected": [
+        {"error_text": "is", "accept": ["are"]}
+      ]
+    },
+    {
+      "id": "case9-results-method",
+      "language": "en-GB",
+      "text": "The results shows that the method work under pressure.",
+      "expected": [
+        {"error_text": "shows", "accept": ["show"]},
+        {"error_text": "work", "accept": ["works"]}
+      ]
+    },
+    {
+      "id": "case10-this-are",
+      "language": "en-GB",
+      "text": "This are an unusual mistake in the appendix.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "case11-negative-clean",
+      "language": "en-GB",
+      "text": "The data are reliable, and the results are consistent.",
+      "expected": []
+    },
+    {
+      "id": "case12-intro-comma",
+      "language": "en-GB",
+      "text": "In the morning we left for the station.",
+      "expected": [
+        {"error_text": "In the morning", "accept": ["In the morning,"]}
+      ]
+    },
+    {
+      "id": "case13-boundary-lowercase",
+      "language": "en-GB",
+      "text": "She left early. and returned before noon.",
+      "expected": [
+        {"error_text": "and", "error_text_alt": ["and returned before noon."], "accept": ["And"]}
+      ]
+    },
+    {
+      "id": "case14-double-period",
+      "language": "en-GB",
+      "text": "The report ends here.. It should stop.",
+      "expected": [
+        {"error_text": "here..", "error_text_alt": ["ends here.."], "accept": ["here.", "here...", "ends here."]}
+      ]
+    },
+    {
+      "id": "case15-missing-period",
+      "language": "en-GB",
+      "text": "The summary ends without a period",
+      "expected": [
+        {"error_text": "period", "error_text_alt": ["ends without a period"], "accept": ["period."]}
+      ]
+    },
+    {
+      "id": "case16-comma-splice",
+      "language": "en-GB",
+      "text": "It was late, we went home.",
+      "expected": [
+        {"error_text": "late, we", "accept": ["late, and we", "late; we", "late. We"]}
+      ]
+    },
+    {
+      "id": "case17-markdown-basic",
+      "language": "en-GB",
+      "text": "The **result** are clear, and the _summary_ was wrote yesterday.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]},
+        {"error_text": "wrote", "error_text_alt": ["was wrote"], "accept": ["written", "was written"], "accept_contains": ["written"]}
+      ]
+    },
+    {
+      "id": "case18-markdown-latex",
+      "language": "en-GB",
+      "text": "The gradients of lines $y=15x+130$ and $y=20x+35$ is shown here. The equation $E=mc^2$ are famous.",
+      "expected": [
+        {"error_text": "is", "accept": ["are"]},
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "case19-negative-clean-1",
+      "language": "en-GB",
+      "text": "The team was ready, and the documents were complete.",
+      "expected": []
+    },
+    {
+      "id": "case20-negative-clean-2",
+      "language": "en-GB",
+      "text": "After the meeting, we agreed on the next steps.",
+      "expected": []
+    },
+    {
+      "id": "case21-negative-clean-3",
+      "language": "en-GB",
+      "text": "The results are consistent with previous studies.",
+      "expected": []
+    },
+    {
+      "id": "case22-negative-clean-4",
+      "language": "en-GB",
+      "text": "She said, \"I will return tomorrow.\"",
+      "expected": []
+    },
+    {
+      "id": "case23-negative-clean-5",
+      "language": "en-GB",
+      "text": "The project finished on time; everyone was satisfied.",
+      "expected": []
+    }
+  ]
+}

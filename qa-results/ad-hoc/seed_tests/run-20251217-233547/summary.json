@@ -1,0 +1,20 @@
+[
+  {
+    "label": "no_seed",
+    "runs": 5,
+    "unique_digests": 3,
+    "parse_failures": 0
+  },
+  {
+    "label": "same_seed",
+    "runs": 5,
+    "unique_digests": 4,
+    "parse_failures": 0
+  },
+  {
+    "label": "different_seed",
+    "runs": 5,
+    "unique_digests": 5,
+    "parse_failures": 0
+  }
+]

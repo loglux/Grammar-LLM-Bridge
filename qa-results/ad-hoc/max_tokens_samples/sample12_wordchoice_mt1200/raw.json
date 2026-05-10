@@ -1,0 +1,28 @@
+{
+  "id": "b9c05ca9-4272-4cc9-8c99-cc43aee8ffa3",
+  "object": "chat.completion",
+  "created": 1766008584,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n  {\n    \"message\": \"Word choice - 'states' is less formal; consider alternatives for professional writing\",\n    \"error_text\": \"states\",\n    \"replacements\": [\"claims\", \"asserts\", \"indicates\", \"says\"]\n  },\n  {\n    \"message\": \"Word choice - 'suppose' is informal or less precise here; consider alternatives\",\n    \"error_text\": \"suppose\",\n    \"replacements\": [\"argue\", \"believe\", \"contend\", \"suggest\"]\n  }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 630,
+    "completion_tokens": 111,
+    "total_tokens": 741,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 54
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

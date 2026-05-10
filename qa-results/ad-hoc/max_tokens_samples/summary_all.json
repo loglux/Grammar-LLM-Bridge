@@ -1,0 +1,233 @@
+[
+  {
+    "sample": "sample10_postpone.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 4.79,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample10_postpone.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 5.56,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample10_postpone.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 5.55,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample12_wordchoice.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 3.03,
+    "json_error": null,
+    "errors_count": 1
+  },
+  {
+    "sample": "sample12_wordchoice.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 4.89,
+    "json_error": null,
+    "errors_count": 2
+  },
+  {
+    "sample": "sample12_wordchoice.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 4.46,
+    "json_error": null,
+    "errors_count": 2
+  },
+  {
+    "sample": "sample1_sv_punct.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 7.42,
+    "json_error": null,
+    "errors_count": 5
+  },
+  {
+    "sample": "sample1_sv_punct.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 5.97,
+    "json_error": null,
+    "errors_count": 5
+  },
+  {
+    "sample": "sample1_sv_punct.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 5.0,
+    "json_error": null,
+    "errors_count": 5
+  },
+  {
+    "sample": "sample2_articles_commas_end.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 3.65,
+    "json_error": null,
+    "errors_count": 2
+  },
+  {
+    "sample": "sample2_articles_commas_end.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 4.49,
+    "json_error": null,
+    "errors_count": 3
+  },
+  {
+    "sample": "sample2_articles_commas_end.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 4.7,
+    "json_error": null,
+    "errors_count": 3
+  },
+  {
+    "sample": "sample3_markdown_latex.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 4.24,
+    "json_error": null,
+    "errors_count": 3
+  },
+  {
+    "sample": "sample3_markdown_latex.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 4.22,
+    "json_error": null,
+    "errors_count": 3
+  },
+  {
+    "sample": "sample3_markdown_latex.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 4.54,
+    "json_error": null,
+    "errors_count": 3
+  },
+  {
+    "sample": "sample4_repeated_tokens.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 11.53,
+    "json_error": null,
+    "errors_count": 7
+  },
+  {
+    "sample": "sample4_repeated_tokens.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 11.29,
+    "json_error": null,
+    "errors_count": 7
+  },
+  {
+    "sample": "sample4_repeated_tokens.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 8.98,
+    "json_error": null,
+    "errors_count": 6
+  },
+  {
+    "sample": "sample5_typography_quotes.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 7.87,
+    "json_error": null,
+    "errors_count": 5
+  },
+  {
+    "sample": "sample5_typography_quotes.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 6.53,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample5_typography_quotes.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 7.63,
+    "json_error": null,
+    "errors_count": 5
+  },
+  {
+    "sample": "sample6_contractions_quotes.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 5.1,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample6_contractions_quotes.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 5.94,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample6_contractions_quotes.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 6.48,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample7_uncountable_sv.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 3.39,
+    "json_error": null,
+    "errors_count": 2
+  },
+  {
+    "sample": "sample7_uncountable_sv.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 3.01,
+    "json_error": null,
+    "errors_count": 2
+  },
+  {
+    "sample": "sample7_uncountable_sv.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 2.64,
+    "json_error": null,
+    "errors_count": 2
+  },
+  {
+    "sample": "sample8_complex_sv.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 5.11,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample8_complex_sv.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 4.76,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample8_complex_sv.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 5.22,
+    "json_error": null,
+    "errors_count": 4
+  },
+  {
+    "sample": "sample9_long_complex.txt",
+    "max_tokens": 400,
+    "elapsed_sec": 7.49,
+    "json_error": null,
+    "errors_count": 7
+  },
+  {
+    "sample": "sample9_long_complex.txt",
+    "max_tokens": 800,
+    "elapsed_sec": 7.48,
+    "json_error": null,
+    "errors_count": 8
+  },
+  {
+    "sample": "sample9_long_complex.txt",
+    "max_tokens": 1200,
+    "elapsed_sec": 7.69,
+    "json_error": null,
+    "errors_count": 8
+  }
+]

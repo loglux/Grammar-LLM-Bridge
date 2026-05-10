@@ -1,0 +1,13 @@
+## Experiment Plan
+
+- Step 1: Analyse the data, it seems the system fails to identify the missing comma.
+- Step 2: Re-run the validation and note the parts that requires clarification.
+
+### Notes
+
+```
+The algorithm calculates how the gradient evolves over time.
+It requires high precision when dealing with vectors.
+```
+
+Inline math: $f(x) = \frac{1}{2} x^T Q x + c^T x$

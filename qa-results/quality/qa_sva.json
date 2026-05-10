@@ -1,0 +1,202 @@
+{
+  "cases": [
+    {
+      "id": "sva1-list-of-items",
+      "language": "en-GB",
+      "text": "The list of items is long and detailed.",
+      "expected": []
+    },
+    {
+      "id": "sva2-key-feature-models",
+      "language": "en-GB",
+      "text": "A key feature of these models is their speed and reliability.",
+      "expected": []
+    },
+    {
+      "id": "sva3-items-in-list-is",
+      "language": "en-GB",
+      "text": "The items in the list is causing confusion.",
+      "expected": [
+        {"error_text": "is", "accept": ["are"]}
+      ]
+    },
+    {
+      "id": "sva4-horses-runs",
+      "language": "en-GB",
+      "text": "The horses runs fast across the field.",
+      "expected": [
+        {"error_text": "runs", "accept": ["run"]}
+      ]
+    },
+    {
+      "id": "sva5-series-was",
+      "language": "en-GB",
+      "text": "A series of complex tests was conducted yesterday.",
+      "expected": []
+    },
+    {
+      "id": "sva6-series-were",
+      "language": "en-GB",
+      "text": "A series of tests were flawed from the start.",
+      "expected": [
+        {"error_text": "were", "accept": ["was"]}
+      ]
+    },
+    {
+      "id": "sva7-each-of-students",
+      "language": "en-GB",
+      "text": "Each of the students is responsible for their own project.",
+      "expected": []
+    },
+    {
+      "id": "sva8-each-of-students-are",
+      "language": "en-GB",
+      "text": "Each of the students are responsible for their own project.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "sva9-one-of-problems-are",
+      "language": "en-GB",
+      "text": "One of the main problems are the deadlines.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "sva10-one-of-problems-is",
+      "language": "en-GB",
+      "text": "One of the main problems is the deadlines.",
+      "expected": []
+    },
+    {
+      "id": "sva11-group-of-experts-is",
+      "language": "en-GB",
+      "text": "The group of experts is meeting tomorrow.",
+      "expected": []
+    },
+    {
+      "id": "sva12-group-of-experts-are",
+      "language": "en-GB",
+      "text": "The group of experts are meeting tomorrow.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "sva13-committee-have",
+      "language": "en-GB",
+      "text": "The committee have decided to postpone the vote.",
+      "expected": [
+        {"error_text": "have", "accept": ["has"]}
+      ]
+    },
+    {
+      "id": "sva14-committee-has",
+      "language": "en-GB",
+      "text": "The committee has decided to postpone the vote.",
+      "expected": []
+    },
+    {
+      "id": "sva15-list-of-participants-are",
+      "language": "en-GB",
+      "text": "The list of participants are attached below.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "sva16-list-of-participants-is",
+      "language": "en-GB",
+      "text": "The list of participants is attached below.",
+      "expected": []
+    },
+    {
+      "id": "sva17-list-with-relative-clause",
+      "language": "en-GB",
+      "text": "The list of the new items, which are still being reviewed, is attached below.",
+      "expected": []
+    },
+    {
+      "id": "sva18-catalogue-of-books-with-notes",
+      "language": "en-GB",
+      "text": "A catalogue of rare books with detailed annotations is available for consultation.",
+      "expected": []
+    },
+    {
+      "id": "sva19-news-is",
+      "language": "en-GB",
+      "text": "The news is encouraging for everyone involved.",
+      "expected": []
+    },
+    {
+      "id": "sva20-mathematics-is",
+      "language": "en-GB",
+      "text": "Mathematics is a challenging subject, but practice helps.",
+      "expected": []
+    },
+    {
+      "id": "sva21-statistics-is",
+      "language": "en-GB",
+      "text": "Statistics is a tricky field that requires careful interpretation.",
+      "expected": []
+    },
+    {
+      "id": "sva22-one-of-students-is",
+      "language": "en-GB",
+      "text": "One of the students in the advanced course is presenting tomorrow.",
+      "expected": []
+    },
+    {
+      "id": "sva23-one-of-students-are",
+      "language": "en-GB",
+      "text": "One of the students in the advanced course are presenting tomorrow.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "sva24-each-of-proposals-is",
+      "language": "en-GB",
+      "text": "Each of the proposals in the report is carefully justified.",
+      "expected": []
+    },
+    {
+      "id": "sva25-each-of-proposals-are",
+      "language": "en-GB",
+      "text": "Each of the proposals in the report are carefully justified.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "sva26-one-of-main-issues-is",
+      "language": "en-GB",
+      "text": "One of the main issues with the schedule is the limited resources.",
+      "expected": []
+    },
+    {
+      "id": "sva27-one-of-main-issues-are",
+      "language": "en-GB",
+      "text": "One of the main issues with the schedule are the limited resources.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "sva28-another-of-the-reasons-is",
+      "language": "en-GB",
+      "text": "Another of the reasons for the delay is the late approvals.",
+      "expected": []
+    },
+    {
+      "id": "sva29-another-of-the-reasons-are",
+      "language": "en-GB",
+      "text": "Another of the reasons for the delay are the late approvals.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "suggests",
+        "replacements": ["suggest"]
+    },
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "debates",
+        "replacements": ["debate"]
+    },
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "remains",
+        "replacements": ["remain"]
+    },
+    {
+        "message": "Subject-verb agreement error",
+        "error_text": "demands",
+        "replacements": ["demand"]
+    }
+]

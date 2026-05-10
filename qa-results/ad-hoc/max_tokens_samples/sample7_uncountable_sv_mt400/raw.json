@@ -1,0 +1,28 @@
+{
+  "id": "8d2aa73b-d24f-42a7-8d07-eb07f5be0524",
+  "object": "chat.completion",
+  "created": 1766008704,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Subject-verb agreement error\",\n        \"error_text\": \"states\",\n        \"replacements\": [\"state\"]\n    },\n    {\n        \"message\": \"Subject-verb agreement error\",\n        \"error_text\": \"shows\",\n        \"replacements\": [\"show\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 636,
+    "completion_tokens": 69,
+    "total_tokens": 705,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 124
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

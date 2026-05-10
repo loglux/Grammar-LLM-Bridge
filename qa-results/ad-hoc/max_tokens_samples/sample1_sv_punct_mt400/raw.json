@@ -1,0 +1,28 @@
+{
+  "id": "fdb452e3-0ba9-4fcf-8412-b16e2fd0d914",
+  "object": "chat.completion",
+  "created": 1766008589,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Subject-verb agreement error: 'data' is plural\",\n        \"error_text\": \"is\",\n        \"replacements\": [\"are\"]\n    },\n    {\n        \"message\": \"Missing comma after introductory word 'However'\",\n        \"error_text\": \"However we\",\n        \"replacements\": [\"However, we\"]\n    },\n    {\n        \"message\": \"Subject-verb agreement error: 'references' is plural\",\n        \"error_text\": \"was\",\n        \"replacements\": [\"were\"]\n    },\n    {\n        \"message\": \"Subject-verb agreement error: third person singular requires 'doesn't'\",\n        \"error_text\": \"don't\",\n        \"replacements\": [\"doesn't\"]\n    },\n    {\n        \"message\": \"Subject-verb agreement error: third person singular requires 'looks'\",\n        \"error_text\": \"look\",\n        \"replacements\": [\"looks\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 606,
+    "completion_tokens": 202,
+    "total_tokens": 808,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 94
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

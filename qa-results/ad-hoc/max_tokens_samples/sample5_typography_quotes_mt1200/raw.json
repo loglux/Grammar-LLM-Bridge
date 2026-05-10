@@ -1,0 +1,28 @@
+{
+  "id": "d17a67f5-bc49-4d78-a0fb-9c1c47bb240f",
+  "object": "chat.completion",
+  "created": 1766008679,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Spelling error - 'furnitured' is not a standard English word\",\n        \"error_text\": \"furnitured\",\n        \"replacements\": [\"furnished\"]\n    },\n    {\n        \"message\": \"Incorrect use of em dash spacing - should have no spaces around dashes\",\n        \"error_text\": \"-- dashes --\",\n        \"replacements\": [\"—dashes—\"]\n    },\n    {\n        \"message\": \"Currency symbol placement error - pound symbol should precede amount\",\n        \"error_text\": \"35£\",\n        \"replacements\": [\"£35\"]\n    },\n    {\n        \"message\": \"Missing capital letter at start of sentence\",\n        \"error_text\": \"the sentence\",\n        \"replacements\": [\"The sentence\"]\n    },\n    {\n        \"message\": \"Incorrect punctuation - double periods instead of ellipsis or single period\",\n        \"error_text\": \"ends..\",\n        \"replacements\": [\"ends...\", \"ends.\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 616,
+    "completion_tokens": 218,
+    "total_tokens": 834,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 40
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

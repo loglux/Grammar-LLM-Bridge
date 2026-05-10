@@ -1,0 +1,9 @@
+[
+    {"message": "Subject-verb agreement error", "error_text": "highlights", "replacements": ["highlight"]},
+    {"message": "Subject-verb agreement error", "error_text": "demonstrates", "replacements": ["demonstrate"]},
+    {"message": "Subject-verb agreement error", "error_text": "emphasises", "replacements": ["emphasise"]},
+    {"message": "Subject-verb agreement error", "error_text": "notes", "replacements": ["note"]},
+    {"message": "Subject-verb agreement error", "error_text": "identifies", "replacements": ["identify"]},
+    {"message": "Subject-verb agreement error", "error_text": "demands", "replacements": ["demand"]},
+    {"message": "Subject-verb agreement error", "error_text": "advocates", "replacements": ["advocate"]}
+]

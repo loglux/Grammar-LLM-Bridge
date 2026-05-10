@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar-LLM-Bridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .highlighted-text {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+            color: transparent;
+        }
+        .error-highlight {
+            background-color: rgba(254, 243, 199, 0.6);
+            border-bottom: 2px solid #f59e0b;
+            cursor: pointer;
+            transition: all 0.2s;
+            pointer-events: auto;
+        }
+        .error-highlight:hover {
+            background-color: rgba(254, 230, 138, 0.7);
+        }
+        .error-highlight.selected {
+            background-color: rgba(254, 202, 202, 0.7);
+            border-bottom: 2px solid #ef4444;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .pulse-once {
+            animation: pulse 0.5s ease-in-out;
+        }
+        mark {
+            background-color: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div class="flex h-screen bg-gray-50">
+        <!-- Left Sidebar -->
+        <div class="w-14 bg-white border-r border-gray-200 flex flex-col items-center py-4 gap-6">
+            <div class="flex flex-col items-center gap-2 cursor-pointer text-blue-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span class="text-xs">Texts</span>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center">
+                <div class="flex-1 flex items-center justify-between pr-6">
+                    <!-- Left side - over editor -->
+                    <div class="flex items-center gap-4">
+                        <h1 class="text-xl font-bold text-gray-800">Grammar-LLM-Bridge</h1>
+                        <div class="flex items-center gap-2 text-sm text-gray-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>Test UI &mdash; needs a running LanguageTool-compatible backend at the URL on the right</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Right side - over editor (issue counter) -->
+                    <div id="headerIssues" class="hidden">
+                        <div id="headerIssueCount" class="flex items-center gap-1.5 px-3 py-1.5 bg-orange-100 text-orange-700 rounded-full">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                            <span class="font-semibold text-sm" id="headerIssueNumber">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Language selector - over right panel -->
+                <div class="w-80 flex items-center justify-center">
+                    <div class="flex items-center gap-2">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Crect fill='%23012169' width='60' height='30'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23FFF' stroke-width='6'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23C8102E' stroke-width='4'/%3E%3Cpath d='M30,0 L30,30 M0,15 L60,15' stroke='%23FFF' stroke-width='10'/%3E%3Cpath d='M30,0 L30,30 M0,15 L60,15' stroke='%23C8102E' stroke-width='6'/%3E%3C/svg%3E" class="w-6 h-4" alt="English">
+                        <span class="text-sm">English</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor Area -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- Center Editor -->
+                <div class="flex-1 flex flex-col bg-white">
+                    <!-- Editor -->
+                    <div class="flex-1 relative overflow-hidden">
+                        <div 
+                            id="highlightedText"
+                            class="absolute top-0 left-0 w-full h-full px-20 py-8 font-mono text-base overflow-auto highlighted-text"
+                            style="z-index: 1; color: transparent; pointer-events: none;"
+                        ></div>
+                        <textarea 
+                            id="textInput"
+                            placeholder="Enter or paste your text here..."
+                            class="relative w-full h-full px-20 py-8 font-mono text-base focus:outline-none overflow-auto bg-transparent"
+                            style="z-index: 2; resize: none;"
+                        ></textarea>
+                    </div>
+
+                    <!-- Bottom Toolbar -->
+                    <div class="border-t border-gray-200 px-6 py-3 flex items-center justify-between bg-gray-50">
+                        <div class="flex items-center gap-4">
+                            <span id="charCount" class="text-sm text-gray-600">0 characters</span>
+                            <span id="wordCount" class="text-sm text-gray-600">0 words</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <input 
+                                type="text" 
+                                id="apiUrl" 
+                                value="http://localhost:9019/v2/check"
+                                class="px-3 py-1.5 border border-gray-300 rounded text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="API URL"
+                                style="width: 280px;"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Status Messages -->
+                    <div id="statusMessage" class="hidden"></div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="w-80 bg-white border-l border-gray-200 flex flex-col">
+                    <!-- Text Score & Settings -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-medium text-gray-700">Text score</span>
+                            <span id="textScore" class="text-2xl font-bold text-blue-600">—</span>
+                        </div>
+
+                        <!-- Picky Mode -->
+                        <div class="flex items-center justify-between py-3 border-b border-gray-100">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                <span class="text-sm text-gray-700">Picky Mode</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+
+                        <!-- Goal -->
+                        <div class="flex items-center justify-between py-3">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                </svg>
+                                <span class="text-sm text-gray-700">Goal</span>
+                            </div>
+                            <span class="text-sm text-gray-500">Set</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex gap-2">
+                            <button 
+                                id="checkBtn"
+                                class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
+                            >
+                                <svg id="checkIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                <span id="checkText">Correct</span>
+                            </button>
+                            <button class="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                Paraphrase
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Suggestions -->
+                    <div class="flex-1 overflow-hidden flex flex-col">
+                        <div class="px-6 py-3 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h2 class="font-semibold text-gray-800">Suggestions</h2>
+                                <span id="issueCount" class="hidden text-xs text-gray-500"></span>
+                            </div>
+                        </div>
+                        
+                        <div id="suggestionsList" class="flex-1 overflow-y-auto">
+                            <div class="p-8 text-center text-gray-500">
+                                <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <p class="text-sm">Enter some text to get started</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let text = '';
+        let matches = [];
+        let selectedMatch = null;
+        let expandedMatches = new Set(); // Track expanded card indices
+
+        // DOM elements
+        const textInput = document.getElementById('textInput');
+        const highlightedText = document.getElementById('highlightedText');
+        const checkBtn = document.getElementById('checkBtn');
+        const checkIcon = document.getElementById('checkIcon');
+        const checkText = document.getElementById('checkText');
+        const charCount = document.getElementById('charCount');
+        const wordCount = document.getElementById('wordCount');
+        const textScore = document.getElementById('textScore');
+        const issueCount = document.getElementById('issueCount');
+        const headerIssues = document.getElementById('headerIssues');
+        const headerIssueNumber = document.getElementById('headerIssueNumber');
+        const statusMessage = document.getElementById('statusMessage');
+        const suggestionsList = document.getElementById('suggestionsList');
+        const apiUrlInput = document.getElementById('apiUrl');
+
+        // Text input handler
+        textInput.addEventListener('input', (e) => {
+            text = e.target.value;
+            
+            // Update character count
+            charCount.textContent = `${text.length} character${text.length !== 1 ? 's' : ''}`;
+            
+            // Update word count
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            wordCount.textContent = `${words.length} word${words.length !== 1 ? 's' : ''}`;
+            
+            // Reset highlights when text changes
+            if (matches.length > 0) {
+                matches = [];
+                selectedMatch = null;
+                updateUI();
+            }
+        });
+
+        // Sync scroll from textarea to highlighted overlay
+        textInput.addEventListener('scroll', () => {
+            highlightedText.scrollTop = textInput.scrollTop;
+            highlightedText.scrollLeft = textInput.scrollLeft;
+        });
+
+        // Check grammar button
+        checkBtn.addEventListener('click', checkGrammar);
+
+        async function checkGrammar() {
+            if (!text.trim()) {
+                showStatus('error', 'Please enter some text to check');
+                return;
+            }
+
+            setLoading(true);
+            matches = [];
+            selectedMatch = null;
+            expandedMatches.clear(); // Reset expanded state
+            hideStatus();
+
+            try {
+                const response = await fetch(apiUrlInput.value, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        language: 'en-GB'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                matches = data.matches || [];
+                
+                if (matches.length === 0) {
+                    showStatus('success', 'No grammar issues found! Your text looks great.');
+                }
+                
+                updateUI();
+            } catch (err) {
+                showStatus('error', `Failed to connect: ${err.message}. Make sure server is running on ${apiUrlInput.value}`);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function setLoading(loading) {
+            checkBtn.disabled = loading;
+            if (loading) {
+                checkIcon.classList.add('spinner');
+                checkText.textContent = 'Checking...';
+            } else {
+                checkIcon.classList.remove('spinner');
+                checkText.textContent = 'Correct';
+            }
+        }
+
+        function showStatus(type, message) {
+            const iconSvg = type === 'error' 
+                ? '<svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>'
+                : '<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+            
+            const bgClass = type === 'error' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200';
+            const textClass = type === 'error' ? 'text-red-700' : 'text-green-700';
+            
+            statusMessage.className = `px-6 py-3 border-t ${bgClass} flex items-start gap-3`;
+            statusMessage.innerHTML = `
+                ${iconSvg}
+                <div class="text-sm ${textClass}">${message}</div>
+            `;
+            statusMessage.classList.remove('hidden');
+        }
+
+        function hideStatus() {
+            statusMessage.classList.add('hidden');
+        }
+
+        function updateUI() {
+            // Update issue count in header and right panel
+            if (matches.length > 0) {
+                // Header badge
+                headerIssues.classList.remove('hidden');
+                headerIssueNumber.textContent = matches.length;
+                
+                // Right panel
+                issueCount.textContent = `${matches.length} issue${matches.length !== 1 ? 's' : ''}`;
+                issueCount.classList.remove('hidden');
+                
+                // Calculate text score (FIXED FORMULA)
+                const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+                const score = words > 0 ? Math.max(0, Math.round(100 - (matches.length / words) * 100)) : 0;
+                
+                textScore.textContent = score;
+                textScore.className = `text-2xl font-bold ${
+                    score >= 90 ? 'text-green-600' : 
+                    score >= 70 ? 'text-blue-600' : 
+                    score >= 50 ? 'text-yellow-600' : 
+                    'text-red-600'
+                }`;
+            } else {
+                // Hide header badge
+                headerIssues.classList.add('hidden');
+                
+                // Hide right panel counter
+                issueCount.classList.add('hidden');
+                
+                // Update score
+                if (text.trim()) {
+                    textScore.textContent = '100';
+                    textScore.className = 'text-2xl font-bold text-green-600';
+                } else {
+                    textScore.textContent = '—';
+                    textScore.className = 'text-2xl font-bold text-blue-600';
+                }
+            }
+
+            // Update highlighted text
+            highlightedText.innerHTML = getHighlightedHTML();
+            
+            // Add click handlers on error highlights
+            if (matches.length > 0) {
+                document.querySelectorAll('.error-highlight').forEach((el, idx) => {
+                    el.style.pointerEvents = 'auto';
+                    el.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        selectMatch(matches[idx]);
+                    });
+                });
+            }
+
+            // Update suggestions panel
+            updateSuggestions();
+        }
+
+        function navigateError(direction) {
+            if (matches.length === 0) return;
+            
+            let currentIdx = selectedMatch ? matches.findIndex(m => m.offset === selectedMatch.offset) : -1;
+            let newIdx = currentIdx + direction;
+            
+            // Handle initial case when no error is selected
+            if (currentIdx === -1) {
+                newIdx = direction > 0 ? 0 : matches.length - 1;
+            }
+            
+            // Clamp to valid range
+            newIdx = Math.max(0, Math.min(matches.length - 1, newIdx));
+            
+            // Auto-expand the card
+            expandedMatches.add(newIdx);
+            
+            selectMatchAndScroll(newIdx);
+        }
+
+        function getHighlightedHTML() {
+            if (matches.length === 0) return text;
+
+            const parts = [];
+            let lastIndex = 0;
+
+            const sortedMatches = [...matches].sort((a, b) => a.offset - b.offset);
+
+            sortedMatches.forEach((match, idx) => {
+                // Text before error
+                if (match.offset > lastIndex) {
+                    parts.push(escapeHtml(text.substring(lastIndex, match.offset)));
+                }
+
+                // Highlighted error
+                const isSelected = selectedMatch?.offset === match.offset;
+                const errorText = text.substring(match.offset, match.offset + match.length);
+                parts.push(`<span class="error-highlight ${isSelected ? 'selected' : ''}" data-idx="${idx}">${escapeHtml(errorText)}</span>`);
+
+                lastIndex = match.offset + match.length;
+            });
+
+            // Remaining text
+            if (lastIndex < text.length) {
+                parts.push(escapeHtml(text.substring(lastIndex)));
+            }
+
+            return parts.join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function selectMatch(match) {
+            selectedMatch = match;
+            updateUI();
+            
+            // Scroll to the corresponding card in suggestions panel
+            const matchIndex = matches.findIndex(m => m.offset === match.offset);
+            if (matchIndex !== -1) {
+                const card = document.querySelector(`[data-match-idx="${matchIndex}"]`);
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        }
+
+        function getErrorCategory(message) {
+            const msg = message.toLowerCase();
+            
+            // Spelling errors
+            if (msg.includes('spelling') || msg.includes('misspelled') || msg.includes('typo')) {
+                return { type: 'spelling', color: 'text-red-500', bgColor: 'bg-red-100', label: 'Spelling mistake' };
+            }
+            
+            // Style issues
+            if (msg.includes('style') || msg.includes('word choice') || msg.includes('wordiness') || msg.includes('clarity')) {
+                return { type: 'style', color: 'text-purple-500', bgColor: 'bg-purple-100', label: 'Style issue' };
+            }
+            
+            // Grammar (default)
+            return { type: 'grammar', color: 'text-amber-500', bgColor: 'bg-amber-100', label: 'Grammar' };
+        }
+        
+        function toggleCard(idx) {
+            if (expandedMatches.has(idx)) {
+                expandedMatches.delete(idx);
+            } else {
+                expandedMatches.add(idx);
+            }
+            updateSuggestions();
+        }
+
+        function selectMatchAndScroll(idx) {
+            const match = matches[idx];
+            selectedMatch = match;
+            updateUI();
+            
+            // Add pulse animation to the card
+            const card = document.querySelector(`[data-match-idx="${idx}"]`);
+            if (card) {
+                card.classList.add('pulse-once');
+                setTimeout(() => card.classList.remove('pulse-once'), 500);
+            }
+            
+            // Scroll textarea to show the error
+            // Calculate approximate line height and position
+            const textBeforeError = text.substring(0, match.offset);
+            const lines = textBeforeError.split('\n').length;
+            const lineHeight = 24; // approximate line height in pixels
+            const targetScrollTop = Math.max(0, (lines - 5) * lineHeight); // show error ~5 lines from top
+            
+            textInput.scrollTo({
+                top: targetScrollTop,
+                behavior: 'smooth'
+            });
+            
+            // Also focus the textarea
+            textInput.focus();
+        }
+
+        function updateSuggestions() {
+            if (matches.length === 0) {
+                suggestionsList.innerHTML = `
+                    <div class="p-8 text-center text-gray-500">
+                        <svg class="w-12 h-12 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <p class="text-sm">${text.trim() ? 'Click "Check Grammar" to analyse your text' : 'Enter some text to get started'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = matches.map((match, idx) => {
+                const isSelected = selectedMatch?.offset === match.offset;
+                const isExpanded = expandedMatches.has(idx);
+                const category = getErrorCategory(match.message);
+                const errorText = text.substring(match.offset, match.offset + match.length);
+                
+                // Truncate error text if too long (for collapsed view)
+                const shortErrorText = errorText.length > 20 ? errorText.substring(0, 20) + '...' : errorText;
+                
+                // Truncate message for collapsed view
+                const shortMessage = match.message.length > 50 ? match.message.substring(0, 50) + '...' : match.message;
+                
+                // Build card
+                let cardHtml = `
+                    <div 
+                        class="px-3 py-2.5 cursor-pointer transition-all border-b border-gray-100 hover:bg-gray-50 ${
+                            isSelected ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+                        }"
+                        data-match-idx="${idx}"
+                        onclick="toggleCard(${idx}); selectMatchAndScroll(${idx});"
+                    >
+                `;
+                
+                if (isExpanded) {
+                    // EXPANDED: Show full category as header
+                    const currentIdx = idx + 1;
+                    const totalCount = matches.length;
+                    
+                    cardHtml += `
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                <div class="w-1.5 h-1.5 rounded-full ${category.bgColor} flex-shrink-0"></div>
+                                <p class="text-xs font-semibold text-gray-900">
+                                    ${escapeHtml(category.label)}
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-xs text-gray-500">${currentIdx} of ${totalCount}</span>
+                                <div class="flex gap-0.5">
+                                    <button 
+                                        onclick="event.stopPropagation(); navigateError(-1)"
+                                        class="p-0.5 text-gray-500 hover:bg-gray-200 rounded transition-colors disabled:opacity-30"
+                                        ${idx === 0 ? 'disabled' : ''}
+                                    >
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <button 
+                                        onclick="event.stopPropagation(); navigateError(1)"
+                                        class="p-0.5 text-gray-500 hover:bg-gray-200 rounded transition-colors disabled:opacity-30"
+                                        ${idx === matches.length - 1 ? 'disabled' : ''}
+                                    >
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <!-- Full description/explanation -->
+                            <p class="text-xs text-gray-800 leading-relaxed">
+                                ${escapeHtml(match.message)}
+                            </p>
+                            
+                            <!-- Replacement suggestions as pills -->
+                            ${match.replacements && match.replacements.length > 0 ? `
+                                <div class="flex flex-wrap gap-1.5">
+                                    ${match.replacements.slice(0, 3).map((repl, replIdx) => `
+                                        <button 
+                                            onclick="event.stopPropagation(); applyReplacement(${idx})"
+                                            class="px-2.5 py-1 bg-blue-600 text-white text-xs rounded-full hover:bg-blue-700 transition-colors font-medium"
+                                        >
+                                            ${escapeHtml(repl.value || '(delete)')}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Additional options -->
+                            <div class="pt-1.5 border-t border-gray-100">
+                                <button 
+                                    onclick="event.stopPropagation(); ignoreMatch(${idx})"
+                                    class="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                                    </svg>
+                                    Ignore in this text
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // COLLAPSED: Show error word + brief description
+                    cardHtml += `
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                <div class="w-1.5 h-1.5 rounded-full ${category.bgColor} flex-shrink-0"></div>
+                                <p class="text-xs text-gray-900 truncate">
+                                    <span class="font-semibold">${escapeHtml(shortErrorText)}</span>
+                                    <span class="text-gray-600"> – ${escapeHtml(shortMessage)}</span>
+                                </p>
+                            </div>
+                            <svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    `;
+                }
+                
+                cardHtml += `</div>`;
+                return cardHtml;
+            }).join('');
+
+            suggestionsList.innerHTML = html;
+        }
+
+        function applyReplacement(idx) {
+            const match = matches[idx];
+            if (!match.replacements || match.replacements.length === 0) return;
+
+            const replacement = match.replacements[0].value;
+            const before = text.substring(0, match.offset);
+            const after = text.substring(match.offset + match.length);
+            text = before + replacement + after;
+            
+            textInput.value = text;
+            
+            // Update counts
+            charCount.textContent = `${text.length} character${text.length !== 1 ? 's' : ''}`;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            wordCount.textContent = `${words.length} word${words.length !== 1 ? 's' : ''}`;
+            
+            // Remove this match and update offsets
+            const offsetDiff = replacement.length - match.length;
+            matches = matches
+                .filter(m => m.offset !== match.offset)
+                .map(m => {
+                    if (m.offset > match.offset) {
+                        return { ...m, offset: m.offset + offsetDiff };
+                    }
+                    return m;
+                });
+            
+            // Update expanded state - remove deleted card and adjust indices
+            const newExpandedMatches = new Set();
+            expandedMatches.forEach(i => {
+                if (i < idx) newExpandedMatches.add(i);
+                else if (i > idx) newExpandedMatches.add(i - 1);
+            });
+            expandedMatches = newExpandedMatches;
+            
+            selectedMatch = null;
+            updateUI();
+        }
+
+        function ignoreMatch(idx) {
+            const match = matches[idx];
+            matches = matches.filter(m => m.offset !== match.offset);
+            
+            // Update expanded state - remove deleted card and adjust indices
+            const newExpandedMatches = new Set();
+            expandedMatches.forEach(i => {
+                if (i < idx) newExpandedMatches.add(i);
+                else if (i > idx) newExpandedMatches.add(i - 1);
+            });
+            expandedMatches = newExpandedMatches;
+            
+            selectedMatch = null;
+            updateUI();
+            
+            if (matches.length === 0) {
+                showStatus('success', 'All issues resolved or ignored!');
+            }
+        }
+
+        // Make functions available globally
+        window.selectMatch = selectMatch;
+        window.selectMatchAndScroll = selectMatchAndScroll;
+        window.applyReplacement = applyReplacement;
+        window.ignoreMatch = ignoreMatch;
+        window.navigateError = navigateError;
+        window.toggleCard = toggleCard;
+        window.matches = matches;
+        
+        // Add keyboard shortcuts for navigation
+        document.addEventListener('keydown', (e) => {
+            // Only handle shortcuts when suggestions panel has errors
+            if (matches.length === 0) return;
+            
+            // Alt/Option + Arrow Up/Down for navigation
+            if (e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                e.preventDefault();
+                navigateError(e.key === 'ArrowUp' ? -1 : 1);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "id": "e52b9a6a-9bc0-46db-8452-d4624bed4df1",
+  "object": "chat.completion",
+  "created": 1766008698,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Missing apostrophe in contraction\",\n        \"error_text\": \"isnt\",\n        \"replacements\": [\"isn't\"]\n    },\n    {\n        \"message\": \"Missing apostrophe in contraction\",\n        \"error_text\": \"couldnt\",\n        \"replacements\": [\"couldn't\"]\n    },\n    {\n        \"message\": \"Double period at sentence end\",\n        \"error_text\": \"period..\",\n        \"replacements\": [\"period.\"]\n    },\n    {\n        \"message\": \"Sentence fragment - incomplete thought\",\n        \"error_text\": \"and starts with lower-case where it should not.\",\n        \"replacements\": [\"and it starts with a lower-case letter where it should not.\", \"and begins with a lower-case letter where it should not.\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 616,
+    "completion_tokens": 171,
+    "total_tokens": 787,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 40
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

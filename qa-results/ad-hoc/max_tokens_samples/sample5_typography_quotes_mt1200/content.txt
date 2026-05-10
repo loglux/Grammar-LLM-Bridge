@@ -1,0 +1,27 @@
+[
+    {
+        "message": "Spelling error - 'furnitured' is not a standard English word",
+        "error_text": "furnitured",
+        "replacements": ["furnished"]
+    },
+    {
+        "message": "Incorrect use of em dash spacing - should have no spaces around dashes",
+        "error_text": "-- dashes --",
+        "replacements": ["—dashes—"]
+    },
+    {
+        "message": "Currency symbol placement error - pound symbol should precede amount",
+        "error_text": "35£",
+        "replacements": ["£35"]
+    },
+    {
+        "message": "Missing capital letter at start of sentence",
+        "error_text": "the sentence",
+        "replacements": ["The sentence"]
+    },
+    {
+        "message": "Incorrect punctuation - double periods instead of ellipsis or single period",
+        "error_text": "ends..",
+        "replacements": ["ends...", "ends."]
+    }
+]

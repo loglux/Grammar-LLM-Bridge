@@ -1,0 +1,6 @@
+[
+    {"message": "Subject-verb agreement error", "error_text": "postpones", "replacements": ["postponed"]},
+    {"message": "Subject-verb agreement error", "error_text": "argues", "replacements": ["argued"]},
+    {"message": "Subject-verb agreement error", "error_text": "points", "replacements": ["point"]},
+    {"message": "Word choice - consider more precise alternatives", "error_text": "resets", "replacements": ["revised", "adjusted", "modified"]}
+]

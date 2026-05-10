@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "id": "punct1-intro-comma",
+      "language": "en-GB",
+      "text": "In the morning we left for the station.",
+      "expected": [
+        {"error_text": "In the morning", "accept": ["In the morning,"]}
+      ]
+    },
+    {
+      "id": "punct2-boundary-lowercase",
+      "language": "en-GB",
+      "text": "She left early. and returned before noon.",
+      "expected": [
+        {"error_text": "and", "error_text_alt": ["and returned before noon."], "accept": ["And"]}
+      ]
+    },
+    {
+      "id": "punct3-double-period",
+      "language": "en-GB",
+      "text": "The report ends here.. It should stop.",
+      "expected": [
+        {"error_text": "here..", "error_text_alt": ["ends here.."], "accept": ["here.", "here...", "ends here."]}
+      ]
+    },
+    {
+      "id": "punct4-missing-period",
+      "language": "en-GB",
+      "text": "The summary ends without a period",
+      "expected": [
+        {"error_text": "period", "error_text_alt": ["ends without a period"], "accept": ["period."]}
+      ]
+    },
+    {
+      "id": "punct5-comma-splice",
+      "language": "en-GB",
+      "text": "It was late, we went home.",
+      "expected": [
+        {"error_text": "late, we", "accept": ["late, and we", "late; we", "late. We", "late, so we"]}
+      ]
+    },
+    {
+      "id": "punct6-quote-comma",
+      "language": "en-GB",
+      "text": "He said, \"I agree\", and left.",
+      "expected": [
+        {"error_text": "agree\"," , "accept": ["agree,\""]}
+      ]
+    },
+    {
+      "id": "punct7-run-on",
+      "language": "en-GB",
+      "text": "We finished the work it was time to leave.",
+      "expected": [
+        {"error_text": "work it was", "accept": ["work; it was", "work. It was", "work, and it was"]}
+      ]
+    }
+  ]
+}

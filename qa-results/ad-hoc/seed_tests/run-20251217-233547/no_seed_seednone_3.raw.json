@@ -1,0 +1,28 @@
+{
+  "id": "13073526-40ab-47b3-83d5-305b6ea52b8f",
+  "object": "chat.completion",
+  "created": 1766014561,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n  {\"message\": \"Spelling error\", \"error_text\": \"furnitured\", \"replacements\": [\"furnished\"]},\n  {\"message\": \"Incorrect use of em dash\", \"error_text\": \"-- dashes --\", \"replacements\": [\"—dashes—\", \"— dashes —\", \"– dashes –\"]},\n  {\"message\": \"Incorrect apostrophe usage\", \"error_text\": \"it's\", \"replacements\": [\"its\"]},\n  {\"message\": \"Currency symbol placement error\", \"error_text\": \"35£\", \"replacements\": [\"£35\"]},\n  {\"message\": \"Missing capital letter at start of sentence\", \"error_text\": \"and the sentence starts without Capital letter.\", \"replacements\": [\"And the sentence starts without capital letter.\"]},\n  {\"message\": \"Incorrect punctuation\", \"error_text\": \"ends..\", \"replacements\": [\"ends.\", \"ends...\"]}\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 609,
+    "completion_tokens": 199,
+    "total_tokens": 808,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 33
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

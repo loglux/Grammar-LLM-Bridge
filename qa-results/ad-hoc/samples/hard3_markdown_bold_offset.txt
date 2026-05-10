@@ -1,0 +1,2 @@
+The gradients of lines $y=15x+130$ and $y=20x+35$ on the **Figure 1** represent the cost per person.
+The gradient $15$ corresponds to a cost of $£15$ per person, and the gradient $20$ to a cost of $£20$ per person.

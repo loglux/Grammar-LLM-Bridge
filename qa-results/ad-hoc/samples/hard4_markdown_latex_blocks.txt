@@ -1,0 +1,9 @@
+### Analysis
+
+We substitute $y=mx+c$ into the right-hand side and compare the result with the given value.
+
+$$
+E = mc^2
+$$
+
+This sentence ends here.. The next sentence starts with lower-case where it should not.

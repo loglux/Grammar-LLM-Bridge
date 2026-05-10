@@ -1,0 +1,8 @@
+[
+  {"message": "Spelling error", "error_text": "furnitured", "replacements": ["furnished"]},
+  {"message": "Incorrect use of em dash", "error_text": "-- dashes --", "replacements": ["—dashes—"]},
+  {"message": "Incorrect use of apostrophe", "error_text": "it's", "replacements": ["its"]},
+  {"message": "Currency symbol placement error", "error_text": "35£", "replacements": ["£35"]},
+  {"message": "Missing capital letter at start of sentence", "error_text": "and the sentence starts without Capital letter.", "replacements": ["And the sentence starts without capital letter."]},
+  {"message": "Incorrect punctuation", "error_text": "ends..", "replacements": ["ends.", "ends..."]}
+]

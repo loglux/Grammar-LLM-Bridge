@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Missing apostrophe in contraction",
+        "error_text": "isnt",
+        "replacements": ["isn't"]
+    },
+    {
+        "message": "Missing apostrophe in contraction",
+        "error_text": "couldnt",
+        "replacements": ["couldn't"]
+    },
+    {
+        "message": "Double period at sentence end",
+        "error_text": "period..",
+        "replacements": ["period."]
+    },
+    {
+        "message": "Sentence fragment after period",
+        "error_text": "and starts",
+        "replacements": ["And starts"]
+    }
+]

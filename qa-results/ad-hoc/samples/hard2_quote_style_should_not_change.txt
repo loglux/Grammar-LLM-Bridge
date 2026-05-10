@@ -1,0 +1,1 @@
+She said, "I will return tomorrow." He replied, "OK." This text is grammatically correct and should not trigger quote-style suggestions.

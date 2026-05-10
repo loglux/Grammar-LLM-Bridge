@@ -1,0 +1,28 @@
+{
+  "id": "90dcd614-c216-441e-9ae0-f4e9e556946f",
+  "object": "chat.completion",
+  "created": 1766008576,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n  {\n    \"message\": \"Word choice - consider more precise alternatives\",\n    \"error_text\": \"suppose\",\n    \"replacements\": [\"believe\", \"think\", \"argue\", \"suggest\"]\n  }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 630,
+    "completion_tokens": 48,
+    "total_tokens": 678,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 118
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

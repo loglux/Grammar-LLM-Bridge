@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Missing apostrophe in contraction",
+        "error_text": "isnt",
+        "replacements": ["isn't"]
+    },
+    {
+        "message": "Missing apostrophe in contraction",
+        "error_text": "couldnt",
+        "replacements": ["couldn't"]
+    },
+    {
+        "message": "Double period at sentence end",
+        "error_text": "period..",
+        "replacements": ["period."]
+    },
+    {
+        "message": "Sentence fragment - incomplete thought",
+        "error_text": "and starts with lower-case where it should not.",
+        "replacements": ["and it starts with a lower-case letter where it should not.", "and begins with a lower-case letter where it should not."]
+    }
+]

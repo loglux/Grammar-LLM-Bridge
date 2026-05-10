@@ -1,0 +1,7 @@
+{
+  "sample": "sample4_repeated_tokens.txt",
+  "max_tokens": 1200,
+  "elapsed_sec": 8.98,
+  "json_error": null,
+  "errors_count": 6
+}

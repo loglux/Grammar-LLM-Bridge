@@ -1,0 +1,28 @@
+{
+  "id": "2f689b73-a026-4518-80b0-d9970a71b87f",
+  "object": "chat.completion",
+  "created": 1766008687,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\n        \"message\": \"Missing apostrophe in contraction\",\n        \"error_text\": \"isnt\",\n        \"replacements\": [\"isn't\"]\n    },\n    {\n        \"message\": \"Missing apostrophe in contraction\",\n        \"error_text\": \"couldnt\",\n        \"replacements\": [\"couldn't\"]\n    },\n    {\n        \"message\": \"Double period at sentence end\",\n        \"error_text\": \"period..\",\n        \"replacements\": [\"period.\"]\n    },\n    {\n        \"message\": \"Sentence fragment after period\",\n        \"error_text\": \"and starts\",\n        \"replacements\": [\"And starts\"]\n    }\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 616,
+    "completion_tokens": 139,
+    "total_tokens": 755,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 104
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

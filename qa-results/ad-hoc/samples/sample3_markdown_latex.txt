@@ -1,0 +1,13 @@
+# Report Status
+
+The **project summary** are still missing in the final draft.
+
+- Bullet item with bad verb: The numbers was validated.
+- Mixed markup and math: The area is given by $x^2 + y^2$ but results is inconsistent.
+
+```
+code block should stays untouched
+```
+
+Display math:
+$$E = mc^2$$ should not trigger grammar checks.

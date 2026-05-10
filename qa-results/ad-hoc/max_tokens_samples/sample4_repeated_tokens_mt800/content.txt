@@ -1,0 +1,37 @@
+[
+    {
+        "message": "Missing comma after introductory phrase",
+        "error_text": "In the end we",
+        "replacements": ["In the end, we"]
+    },
+    {
+        "message": "Word repetition - consider using synonyms for variety",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Word repetition - consider using synonyms for variety",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Word repetition - consider using synonyms for variety",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Word repetition - consider using synonyms for variety",
+        "error_text": "end",
+        "replacements": ["conclusion", "outcome", "result", "finale"]
+    },
+    {
+        "message": "Comma splice - consider using a period or semicolon instead",
+        "error_text": "comma, and",
+        "replacements": ["comma. And", "comma; and"]
+    },
+    {
+        "message": "Missing period at end of sentence",
+        "error_text": "end",
+        "replacements": ["end."]
+    }
+]

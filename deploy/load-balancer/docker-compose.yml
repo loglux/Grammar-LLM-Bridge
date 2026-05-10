@@ -1,0 +1,79 @@
+services:
+  grammar-llm-01:
+    image: grammar-llm-bridge:latest
+    container_name: grammar-llm-01
+    extra_hosts:
+      - "api.deepseek.com:3.173.21.63"
+    env_file:
+      - .env.bridge
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///./data/grammar_llm_bridge.db
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+    volumes:
+      - ./data:/app/data
+    networks:
+      grammar-fixed-net:
+        ipv4_address: 172.25.0.11
+
+  grammar-llm-02:
+    image: grammar-llm-bridge:latest
+    container_name: grammar-llm-02
+    extra_hosts:
+      - "api.deepseek.com:3.173.21.63"
+    env_file:
+      - .env.bridge
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///./data/grammar_llm_bridge.db
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+    volumes:
+      - ./data:/app/data
+    networks:
+      grammar-fixed-net:
+        ipv4_address: 172.25.0.12
+
+  grammar-llm-balancer:
+    image: nginx:stable
+    container_name: grammar-llm-balancer
+    extra_hosts:
+      - "api.deepseek.com:3.173.21.63"
+      - "grammar-llm-01:172.25.0.11"
+      - "grammar-llm-02:172.25.0.12"
+    ports:
+      - "0.0.0.0:8081:80"
+    volumes:
+      - ./lb.conf:/etc/nginx/conf.d/lb.conf:ro
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - grammar-llm-01
+      - grammar-llm-02
+    networks:
+      grammar-fixed-net:
+        ipv4_address: 172.25.0.20
+
+  grammar-llm-dev:
+    image: grammar-llm-bridge:latest
+    container_name: grammar-llm-dev
+    extra_hosts:
+      - "api.deepseek.com:3.173.21.63"
+    env_file:
+      - .env.bridge
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///./data/grammar_llm_bridge.db
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+    ports:
+      - "9019:8000"
+    profiles:
+      - dev
+    volumes:
+      - ./data:/app/data
+    networks:
+      grammar-fixed-net:
+        ipv4_address: 172.25.0.30
+
+networks:
+  grammar-fixed-net:
+    name: grammar-fixed-net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24

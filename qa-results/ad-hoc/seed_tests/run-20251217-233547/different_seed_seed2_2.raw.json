@@ -1,0 +1,28 @@
+{
+  "id": "8aae9922-7708-4076-8577-a44b4bc266e8",
+  "object": "chat.completion",
+  "created": 1766014622,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n  {\"message\": \"Spelling error\", \"error_text\": \"furnitured\", \"replacements\": [\"furnished\"]},\n  {\"message\": \"Incorrect use of em dash spacing\", \"error_text\": \"-- dashes --\", \"replacements\": [\"—dashes—\", \"— dashes —\"]},\n  {\"message\": \"Incorrect apostrophe usage\", \"error_text\": \"it's\", \"replacements\": [\"its\"]},\n  {\"message\": \"Currency symbol placement error\", \"error_text\": \"35£\", \"replacements\": [\"£35\"]},\n  {\"message\": \"Missing capitalisation at start of sentence\", \"error_text\": \"the sentence\", \"replacements\": [\"The sentence\"]},\n  {\"message\": \"Incorrect punctuation with double dots\", \"error_text\": \"ends..\", \"replacements\": [\"ends.\", \"ends...\"]}\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 609,
+    "completion_tokens": 186,
+    "total_tokens": 795,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 33
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}

@@ -1,0 +1,7 @@
+{
+  "sample": "sample8_complex_sv.txt",
+  "max_tokens": 400,
+  "elapsed_sec": 5.11,
+  "json_error": null,
+  "errors_count": 4
+}

@@ -1,0 +1,62 @@
+{
+  "cases": [
+    {
+      "id": "latex1-inline-sva",
+      "language": "en-GB",
+      "text": "This formula $f(x)=x^2$ are incorrect.",
+      "expected": [
+        {"error_text": "are", "accept": ["is"]}
+      ]
+    },
+    {
+      "id": "latex2-block-continue",
+      "language": "en-GB",
+      "text": "If we draw the graph for the function\\n\\n$$y = -0.02x^{2} + 1.5x + 1.4$$\\n\\nthe y-intercept represent the initial height of the ball.",
+      "expected": [
+        {
+          "error_text": "represent",
+          "accept": ["represents"],
+          "note": "Subject-verb agreement; block math spans blank lines within the sentence."
+        }
+      ]
+    },
+    {
+      "id": "latex3-punctuation-after-block",
+      "language": "en-GB",
+      "text": "The equation $$x^2=1$$, has two solutions.",
+      "expected": [
+        {
+          "error_text": "$$x^2=1$$,",
+          "accept": ["$$x^2=1$$"],
+          "note": "Comma after block math is unnecessary; removing it is the correct fix."
+        }
+      ]
+    },
+    {
+      "id": "latex4-around-math-text",
+      "language": "en-GB",
+      "text": "With $x=4h$ and $p=9b$, the volume of the cone contain $1200 \\text{cm}^{3}$ to two significant figures.",
+      "expected": [
+        {
+          "error_text": "contain",
+          "accept": ["contains"],
+          "error_text_alt": ["contain"]
+        }
+      ]
+    },
+    {
+      "id": "latex5-negative-inside",
+      "language": "en-GB",
+      "text": "The value of $\\alpha$ should remain unchanged.",
+      "expected": [],
+      "note": "no errors; model should not invent fixes in math"
+    },
+    {
+      "id": "latex5-comma-inside-block-ok",
+      "language": "en-GB",
+      "text": "The volume is given by $$V = \\frac{4}{3}\\pi r^3,$$ where $r$ is the radius of the sphere.",
+      "expected": [],
+      "note": "Comma inside block math; should not trigger capitalization or punctuation fixes outside."
+    }
+  ]
+}

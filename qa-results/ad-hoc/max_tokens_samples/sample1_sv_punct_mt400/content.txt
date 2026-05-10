@@ -1,0 +1,27 @@
+[
+    {
+        "message": "Subject-verb agreement error: 'data' is plural",
+        "error_text": "is",
+        "replacements": ["are"]
+    },
+    {
+        "message": "Missing comma after introductory word 'However'",
+        "error_text": "However we",
+        "replacements": ["However, we"]
+    },
+    {
+        "message": "Subject-verb agreement error: 'references' is plural",
+        "error_text": "was",
+        "replacements": ["were"]
+    },
+    {
+        "message": "Subject-verb agreement error: third person singular requires 'doesn't'",
+        "error_text": "don't",
+        "replacements": ["doesn't"]
+    },
+    {
+        "message": "Subject-verb agreement error: third person singular requires 'looks'",
+        "error_text": "look",
+        "replacements": ["looks"]
+    }
+]

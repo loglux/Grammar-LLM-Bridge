@@ -1,0 +1,7 @@
+[
+    {"message": "Subject-verb agreement error", "error_text": "is", "replacements": ["are"]},
+    {"message": "Missing comma after introductory word", "error_text": "However we", "replacements": ["However, we"]},
+    {"message": "Subject-verb agreement error", "error_text": "was", "replacements": ["were"]},
+    {"message": "Subject-verb agreement error", "error_text": "don't", "replacements": ["doesn't"]},
+    {"message": "Subject-verb agreement error", "error_text": "look", "replacements": ["looks"]}
+]

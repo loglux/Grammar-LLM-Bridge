@@ -1,0 +1,28 @@
+{
+  "id": "7fb59b21-56eb-4015-817b-505c33465f54",
+  "object": "chat.completion",
+  "created": 1766008602,
+  "model": "deepseek-chat",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"is\", \"replacements\": [\"are\"]},\n    {\"message\": \"Missing comma after introductory word\", \"error_text\": \"However we\", \"replacements\": [\"However, we\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"was\", \"replacements\": [\"were\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"don't\", \"replacements\": [\"doesn't\"]},\n    {\"message\": \"Subject-verb agreement error\", \"error_text\": \"look\", \"replacements\": [\"looks\"]}\n]"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 606,
+    "completion_tokens": 143,
+    "total_tokens": 749,
+    "prompt_tokens_details": {
+      "cached_tokens": 576
+    },
+    "prompt_cache_hit_tokens": 576,
+    "prompt_cache_miss_tokens": 30
+  },
+  "system_fingerprint": "fp_eaab8d114b_prod0820_fp8_kvcache"
+}
