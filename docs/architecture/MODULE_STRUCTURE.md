@@ -28,7 +28,7 @@ Request → Middleware → Router → Handler → LLM → Response
 
 **Импорты**:
 ```python
-from app.config import MODEL
+from app.config import LLM_MODEL
 from app.models import CheckRequest
 from app.api import v2_router, auth_router
 from app.auth.middleware import api_key_auth_middleware
@@ -45,11 +45,12 @@ from app.auth.middleware import api_key_auth_middleware
 
 **Переменные**:
 ```python
-# LLM settings
-OPENAI_API_KEY
-OPENAI_BASE_URL
-MODEL
+# LLM settings (legacy OPENAI_* names still accepted)
+LLM_API_KEY / OPENAI_API_KEY
+LLM_BASE_URL / OPENAI_BASE_URL
+LLM_MODEL
 LLM_TIMEOUT
+LLM_RETRIES
 
 # Feature flags
 GRAMMAR_ONLY
@@ -60,6 +61,7 @@ LLM_CHUNKING
 LLM_CHUNK_SIZE
 LLM_CHUNK_OVERLAP
 LLM_CHUNK_THRESHOLD
+LLM_CHUNK_STRATEGY        # "paragraph" (legacy) or "recursive"
 ```
 
 **Используется**: всеми модулями для настроек.
@@ -100,7 +102,6 @@ LLM_CHUNK_THRESHOLD
 **Модели**:
 - `User`, `UserCreate`, `UserResponse`
 - `APIKey`, `APIKeyCreate`, `APIKeyResponse`
-- `UsageRecord` - трекинг использования
 
 ---
 
@@ -247,8 +248,11 @@ async def endpoint(user: User = Depends(get_current_user)):
 - Sliding window algorithm
 - In-memory хранилище (сбрасывается на restart)
 - Дефолт: 60/min, 1000/hour
+- Метод `get_limits(user_id)` — текущее использование и лимиты (используется в `/auth/rate-limits`).
 
 **Глобальный инстанс**: `rate_limiter`
+
+**Note**: enforcement-метод (`check_rate_limit`) ещё не подключён к middleware — пока лимитер только репортит usage. См. ROADMAP "Optional Redis-backed rate limiting".
 
 ---
 
@@ -285,7 +289,8 @@ async def endpoint(user: User = Depends(get_current_user)):
 **Главные функции**:
 - `extract_texts_and_mapping()` - original, logical, mapping
 - `mask_math_blocks()` - маскирование LaTeX
-- `split_into_chunks()` - paragraph-aware chunking
+- `split_into_chunks()` - paragraph-aware chunking (legacy strategy)
+- `recursive_chunk()` - recursive char-level splitter с LaTeX-safe boundaries (новая strategy, выбирается env `LLM_CHUNK_STRATEGY=recursive`)
 - `retry_missing_on_sentences()` - sentence-level retry
 
 **Ключевая концепция**:
@@ -313,7 +318,7 @@ Chunks with overlap + anchors
 - Punctuation existence checks
 - Style/typography filtering
 
-**Сложность**: ~340 строк (самый сложный модуль).
+**Сложность**: ~244 строки (самый сложный модуль, ёмкий на heuristics).
 
 #### `app/position_mapper.py`
 **Назначение**: Mapping позиций между версиями текста.
@@ -449,9 +454,11 @@ app/
 └── handlers.py             # Main orchestrator
 ```
 
-**Всего**: ~18 файлов, ~3000 строк (vs 2067 в монолите).
+**Всего**: ~23 файла, ~3100 строк (vs 2067 в монолите).
+
+В дополнение есть `tests/unit/` (юнит-тесты на chunker, mask_math_blocks, extract_texts_and_mapping — 21 тест на момент написания).
 
 ---
 
 Документ создан: 2025-12-28
-Версия: 1.0
+Последняя ревизия: 2026-05-10 (LLM_CHUNK_STRATEGY, recursive_chunk, удаление UsageRecord, чистка устаревших ссылок на MODEL/check_rate_limit).
