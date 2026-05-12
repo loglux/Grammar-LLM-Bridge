@@ -9,10 +9,7 @@ suites under qa-results/quality/.
 """
 import logging
 
-import pytest
-
-from app.prompts import GRAMMAR_SCHEMA, get_prompt
-from app.prompts import common, en
+from app.prompts import GRAMMAR_SCHEMA, common, en, get_prompt
 
 
 def test_get_prompt_default_language_returns_english_blocks():

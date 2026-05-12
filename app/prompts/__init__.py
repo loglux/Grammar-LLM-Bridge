@@ -14,7 +14,6 @@ Locale normalisation strips region/script tags ("en-GB" → "en") and is
 case-insensitive. Unknown languages fall back to English with a warning.
 """
 import logging
-from typing import List
 
 from app.prompts import common
 from app.prompts import en
@@ -68,7 +67,7 @@ def get_prompt(language: str, level: str) -> str:
     lang = _normalise_language(language)
     lang_module, _ = _resolve_module(lang)
 
-    parts: List[str] = [
+    parts: list[str] = [
         common.SYSTEM_INTRO,
         common.MODE_BLOCK,
         *lang_module.BLOCKS,
@@ -81,4 +80,4 @@ def get_prompt(language: str, level: str) -> str:
     return "\n\n".join(parts)
 
 
-__all__ = ["get_prompt", "GRAMMAR_SCHEMA"]
+__all__ = ["GRAMMAR_SCHEMA", "get_prompt"]
