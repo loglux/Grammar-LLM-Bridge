@@ -69,6 +69,7 @@ def test_get_prompt_ru_returns_russian_blocks():
     assert ru.CASES_BLOCK in prompt
     assert ru.TSYA_TSIA_BLOCK in prompt
     assert ru.CONFUSABLES_BLOCK in prompt
+    assert ru.COMMAS_BLOCK in prompt
 
 
 def test_get_prompt_ru_does_not_leak_english_article_rules():

@@ -9,8 +9,10 @@ Deliberately omitted (would generate false positives in Russian):
 - article rules (Russian has no articles);
 - word-order suggestions (Russian word order is flexible);
 - ё/е "missing dot" suggestions (stylistic, not grammatical);
-- comma placement heuristics in complex sentences (too rule-heavy
-  for a single prompt block — revisit later if needed).
+- comma rules outside the five explicit classes in COMMAS_BLOCK
+  (e.g. before "и" in compound sentences, optional comparatives with
+  "как", homogeneous members — the model handles these natively and
+  explicit guidance tends to over-flag).
 """
 
 AGREEMENT_BLOCK = """AGREEMENT (СОГЛАСОВАНИЕ) — REPORT REAL MISMATCHES:
@@ -64,6 +66,44 @@ leave it alone.
   - "Надень куртку." (put on yourself) — correct.
   - "Одень ребёнка." (dress someone else) — correct."""
 
+COMMAS_BLOCK = """COMMAS (ЗАПЯТЫЕ) — REPORT CLEAR MISSING COMMAS, NOT STYLE:
+
+Five clear-cut classes. Outside these, do NOT suggest commas.
+
+1) Subordinate clauses: a comma at the boundary with что, чтобы, если,
+   когда, потому что, так как, хотя, etc.
+   - "Я знаю что он придёт." → "Я знаю, что он придёт."
+   - "Он опоздал потому что был занят." → "Он опоздал, потому что был занят."
+   - Do NOT split inside fixed compounds: "потому что" / "так как" /
+     "несмотря на то что" are single conjunctions — never put a comma
+     before "что" if it follows "потому"/"так как"/etc.
+
+2) Participial phrases (ПРИЧАСТНЫЙ ОБОРОТ) AFTER the noun: commas
+   on both sides (or one side if at clause boundary).
+   - "Книга лежащая на столе принадлежит мне." →
+     "Книга, лежащая на столе, принадлежит мне."
+   - Do NOT flag if the participle is BEFORE the noun:
+     "Лежащая на столе книга принадлежит мне." — correct, no commas.
+
+3) Adverbial participles (ДЕЕПРИЧАСТНЫЙ ОБОРОТ): always commas.
+   - "Войдя в комнату он увидел свет." → "Войдя в комнату, он увидел свет."
+   - "Он шёл напевая песню." → "Он шёл, напевая песню."
+
+4) Address (ОБРАЩЕНИЕ): commas around the addressee.
+   - "Иван иди сюда." → "Иван, иди сюда."
+   - "Расскажи мне Маша эту историю." → "Расскажи мне, Маша, эту историю."
+
+5) Introductory words (ВВОДНЫЕ СЛОВА): конечно, к сожалению, например,
+   по-моему, кажется, наверное — comma after (or around if mid-sentence).
+   - "К сожалению я опоздал." → "К сожалению, я опоздал."
+   - "Это конечно неправильно." → "Это, конечно, неправильно."
+   - Do NOT confuse with the same word as an adverb: "Это, конечно, верно"
+     (introductory, comma) vs "Он конечно знает дорогу" (adverb of certainty,
+     no comma) — when in doubt, prefer the introductory reading only if the
+     word is clearly parenthetical.
+
+For ANY case not matching these five — leave it alone."""
+
 # Ordered list of blocks contributed by this language module.
 # The dispatcher inserts these after MODE_BLOCK and before the
 # language-agnostic output / format blocks from `common`.
@@ -72,4 +112,5 @@ BLOCKS = [
     CASES_BLOCK,
     TSYA_TSIA_BLOCK,
     CONFUSABLES_BLOCK,
+    COMMAS_BLOCK,
 ]
