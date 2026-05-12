@@ -42,7 +42,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["B"]  # tests get a pass on bugbear (mock callables, etc.)
-"app/prompts.py" = ["RUF001", "RUF003"]  # prompt strings contain intentional unicode
+"app/prompts/*.py" = ["RUF001", "RUF002", "RUF003"]  # prompt strings & docstrings contain intentional unicode (en-dash, Cyrillic, etc.)
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

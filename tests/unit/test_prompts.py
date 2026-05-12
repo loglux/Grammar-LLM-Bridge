@@ -9,7 +9,7 @@ suites under qa-results/quality/.
 """
 import logging
 
-from app.prompts import GRAMMAR_SCHEMA, common, en, get_prompt
+from app.prompts import GRAMMAR_SCHEMA, common, en, get_prompt, ru
 
 
 def test_get_prompt_default_language_returns_english_blocks():
@@ -60,6 +60,33 @@ def test_get_prompt_output_assembly_order():
     pos_output = prompt.index(common.OUTPUT_FORMAT_BLOCK)
     pos_latex = prompt.index(common.LATEX_BLOCK)
     assert pos_intro < pos_sva < pos_output < pos_latex
+
+
+def test_get_prompt_ru_returns_russian_blocks():
+    """`get_prompt("ru", ...)` composes with the Russian-specific blocks."""
+    prompt = get_prompt("ru", "default")
+    assert ru.AGREEMENT_BLOCK in prompt
+    assert ru.CASES_BLOCK in prompt
+    assert ru.TSYA_TSIA_BLOCK in prompt
+    assert ru.CONFUSABLES_BLOCK in prompt
+
+
+def test_get_prompt_ru_does_not_leak_english_article_rules():
+    """English-specific article rules must NOT appear for Russian
+    (Russian has no articles; the rules would be a false-positive engine)."""
+    prompt = get_prompt("ru", "default")
+    assert en.ARTICLES_TRIGGER not in prompt
+    assert en.ARTICLES_DO_NOT_REPORT not in prompt
+    assert en.SVA_BLOCK not in prompt
+
+
+def test_get_prompt_ru_normalises_locale():
+    """ru-RU and RU should both resolve to ru, not fall back to en."""
+    base = get_prompt("ru", "default")
+    assert get_prompt("ru-RU", "default") == base
+    assert get_prompt("RU", "default") == base
+    # And ensure it's actually using the Russian module
+    assert ru.AGREEMENT_BLOCK in base
 
 
 def test_grammar_schema_reexport_is_the_same_object():

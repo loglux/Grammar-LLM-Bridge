@@ -17,6 +17,7 @@ import logging
 
 from app.prompts import common
 from app.prompts import en
+from app.prompts import ru
 from app.prompts.common import GRAMMAR_SCHEMA  # re-export
 
 logger = logging.getLogger("customlt")
@@ -26,6 +27,7 @@ logger = logging.getLogger("customlt")
 # registry keeps the surface small and grep-friendly for now.
 _LANGUAGE_MODULES = {
     "en": en,
+    "ru": ru,
 }
 
 _DEFAULT_LANGUAGE = "en"
