@@ -1,5 +1,9 @@
 """
-System prompts and prompt blocks for LLM grammar checking.
+Language-agnostic prompt blocks and the response JSON schema.
+
+These blocks form the scaffold of every system prompt regardless of the
+language under check. Language-specific blocks (SVA, articles, ...) live in
+per-language modules such as `app/prompts/en.py`.
 """
 
 SYSTEM_INTRO = """You are a strict grammar-checking engine similar to LanguageTool Premium.
@@ -23,39 +27,6 @@ MODE_BLOCK = """MODE:
   - Treat all input as standard prose.
   - Report all high-confidence and medium-confidence grammatical issues.
   - Apply article and confusable-word rules more aggressively."""
-
-SVA_BLOCK = """SUBJECT–VERB AGREEMENT (AVOID FALSE POSITIVES):
-- The subject is not the nearest plural noun. Analyse the whole phrase.
-- GOOD: "The list of new items is long." → subject = list (singular), DO NOT change "is".
-- GOOD: "A key feature of these models is their speed." → subject = feature (singular), DO NOT change "is".
-- BAD: "The items in the list is long." → subject = items (plural), MUST change "is"→"are".
-- GOOD: "The horses runs fast." → flag "runs" → ["run"].
-- BAD: "The list of approved items, which contains many entries, is now final." → DO NOT flag "is"."""
-
-ARTICLES_TRIGGER = """ARTICLES – TRIGGER (HIGH CONFIDENCE, MUST REPORT):
-- In standard prose, a missing determiner before a singular countable common noun MUST be reported.
-- Determiners include: a/an, the, this/that/these/those, my/your/his/her/its/our/their, some/any, each/every, no, another,
-  numbers (one/2/three...), and possessives (John's).
-- If the noun phrase begins with adjectives but has no determiner, still report it (e.g., "new phone" needs "a/the")."""
-
-ARTICLES_DO_NOT_REPORT = """ARTICLES – DO NOT REPORT:
-- Do NOT report for proper nouns, plural generic nouns, nouns already quantified (numbers/quantifiers), mass/uncountable nouns, or common fixed expressions (go to school, at home, in bed, by car, at work)."""
-
-ARTICLES_REPLACEMENTS = """ARTICLES – REPLACEMENTS CONSTRAINT:
-- Replacements MUST preserve the original meaning of the sentence.
-- Do NOT introduce new semantic assumptions.
-- Do NOT introduce possessive determiners (my/your/his/her/its/our/their) unless possession is explicitly indicated in the text.
-- Prefer neutral articles only:
-  - a/an for first mention or nonspecific reference
-  - the for clearly specific reference"""
-
-CONFUSABLE_VERB_OBJECT = """CONFUSABLE WORDS – VERB OBJECT HEURISTIC:
-- If a noun is the direct object of a verb, consider whether that noun is a plausible object for that verb.
-- For highly common verbs with strong object preferences (read, write, wear, eat, drink, pay, win, lose), a confusable correction may be high-confidence."""
-
-CONFUSABLE_CONFIDENCE = """CONFUSABLE WORDS – CONFIDENCE LABELS:
-- If the context suggests a confusion but is not definitive, still report it with message starting with "Possible confusion:".
-- Keep replacements to the most likely alternative (one option)."""
 
 OUTPUT_FORMAT_BLOCK = """OUTPUT FORMAT:
 Return ONLY a JSON array at the top level (not wrapped in an object).
@@ -98,25 +69,6 @@ LATEX_BLOCK = """LATEX FORMULAS - CRITICAL CONTEXT:
 - Inline formulas ($x$, $y$) are variables within narrative text
 - DO NOT suggest capitalization changes for text following $$...$$
 - Skip content INSIDE formulas ($...$ and $$...$$) - check only regular text"""
-
-# Assembled system message
-SYSTEM_MESSAGE = "\n\n".join(
-    [
-        SYSTEM_INTRO,
-        MODE_BLOCK,
-        SVA_BLOCK,
-        ARTICLES_TRIGGER,
-        ARTICLES_DO_NOT_REPORT,
-        ARTICLES_REPLACEMENTS,
-        CONFUSABLE_VERB_OBJECT,
-        CONFUSABLE_CONFIDENCE,
-        OUTPUT_FORMAT_BLOCK,
-        REPLACEMENTS_BLOCK,
-        CRITICAL_RULES_BLOCK,
-        EXAMPLE_JSON_BLOCK,
-        LATEX_BLOCK,
-    ]
-)
 
 # JSON Schema definition for OpenAI/Ollama
 GRAMMAR_SCHEMA = {
