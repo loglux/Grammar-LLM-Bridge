@@ -1,0 +1,174 @@
+{
+  "_comment": "Russian gold-suite. Three buckets: focused smoke (one error per block), anti-FP (must return zero matches), and a large mixed paragraph that also stresses the chunker. `accept` is a list of acceptable replacements (case-sensitive); `accept_contains` matches if any candidate substring appears in any returned replacement.",
+  "cases": [
+    {
+      "id": "ru-smoke-agreement-number",
+      "language": "ru",
+      "text": "Дети играл во дворе.",
+      "expected": [
+        {"error_text": "играл", "accept": ["играли"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-agreement-gender",
+      "language": "ru",
+      "text": "У них красивая стол.",
+      "expected": [
+        {"error_text": "красивая", "accept": ["красивый"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-case-preposition",
+      "language": "ru",
+      "text": "Иду в магазина.",
+      "expected": [
+        {"error_text": "магазина", "accept": ["магазин"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-case-verb",
+      "language": "ru",
+      "text": "Он помог мою сестре с уроками.",
+      "expected": [
+        {"error_text": "мою", "accept": ["моей"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-tsya-infinitive",
+      "language": "ru",
+      "text": "Он любит купатся в реке.",
+      "expected": [
+        {"error_text": "купатся", "accept": ["купаться"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-tsya-3person",
+      "language": "ru",
+      "text": "Ребёнок учиться в школе уже два года.",
+      "expected": [
+        {"error_text": "учиться", "accept": ["учится"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-confusable-takzhe",
+      "language": "ru",
+      "text": "Он сделал также, как я объяснил.",
+      "expected": [
+        {"error_text": "также", "accept": ["так же"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-comma-subordinate",
+      "language": "ru",
+      "text": "Я знаю что он придёт.",
+      "expected": [
+        {"error_text": "знаю что", "accept_contains": [", что"], "accept": ["знаю, что"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-comma-adverbial-participle",
+      "language": "ru",
+      "text": "Войдя в комнату он увидел свет.",
+      "expected": [
+        {"error_text": "комнату он", "accept_contains": [", он"], "accept": ["комнату, он"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-comma-address",
+      "language": "ru",
+      "text": "Иван иди сюда.",
+      "expected": [
+        {"error_text": "Иван иди", "accept_contains": [", иди"], "accept": ["Иван, иди"]}
+      ]
+    },
+    {
+      "id": "ru-smoke-comma-intro-word",
+      "language": "ru",
+      "text": "К сожалению я опоздал.",
+      "expected": [
+        {"error_text": "К сожалению я", "accept_contains": [", я"], "accept": ["К сожалению, я"]}
+      ]
+    },
+
+    {
+      "id": "ru-antifp-participle-before-noun",
+      "language": "ru",
+      "text": "Лежащая на столе книга мне знакома.",
+      "expected": []
+    },
+    {
+      "id": "ru-antifp-collective-singular",
+      "language": "ru",
+      "text": "Часть студентов написала контрольную работу.",
+      "expected": []
+    },
+    {
+      "id": "ru-antifp-prepositional-correct",
+      "language": "ru",
+      "text": "Я живу в Москве.",
+      "expected": []
+    },
+    {
+      "id": "ru-antifp-two-subjects-plural",
+      "language": "ru",
+      "text": "Учитель и ученик пришли вовремя.",
+      "expected": []
+    },
+    {
+      "id": "ru-antifp-konechno-adverb",
+      "language": "ru",
+      "text": "Он конечно знает дорогу.",
+      "expected": []
+    },
+    {
+      "id": "ru-antifp-fronted-object",
+      "language": "ru",
+      "text": "Книгу я прочитал вчера.",
+      "expected": []
+    },
+    {
+      "id": "ru-antifp-potomu-chto-correct",
+      "language": "ru",
+      "text": "Он опоздал, потому что был занят.",
+      "expected": []
+    },
+    {
+      "id": "ru-antifp-molodezh-singular",
+      "language": "ru",
+      "text": "Молодёжь не любит шум.",
+      "expected": []
+    },
+
+    {
+      "id": "ru-medium-mixed",
+      "language": "ru",
+      "text": "Дети играл во дворе пока их мама готовила обед. Я знаю что он придёт но боюсь что опоздает. Войдя в комнату он увидел что свет включён. Также я хочу добавить что ребёнок учиться в школе.",
+      "expected": [
+        {"error_text": "играл", "accept": ["играли"]},
+        {"error_text": "знаю что", "accept_contains": [", что"]},
+        {"error_text": "боюсь что", "accept_contains": [", что"]},
+        {"error_text": "комнату он", "accept_contains": [", он"]},
+        {"error_text": "увидел что", "accept_contains": [", что"]},
+        {"error_text": "учиться", "accept": ["учится"]}
+      ]
+    },
+
+    {
+      "id": "ru-large-paragraph-mixed",
+      "language": "ru",
+      "text": "Вчера дети играл во дворе пока их мама готовила обед на кухне. Я знаю что они любят гулять в парке, особенно когда погода тёплая. Лежащая на столе книга мне напомнила историю одного писателя. Часть студентов написала контрольную работу хорошо, но другие сильно отстали. Войдя в комнату он увидел что свет уже включён, а на полу лежит чья-то куртка. К сожалению я опоздал на встречу из-за пробок на дороге. Иван приходи завтра пораньше, у нас будет много дел. Он сделал также, как я объяснил вчера на тренировке. Ребёнок учиться в школе уже два года и уже хорошо читает. Мы видела фильм вчера, который мне очень понравился. Учитель и ученик пришли вовремя на урок, что бывает не всегда. Молодёжь не любит шум в позднее время суток.",
+      "expected": [
+        {"error_text": "играл", "accept": ["играли"]},
+        {"error_text": "знаю что", "accept_contains": [", что"]},
+        {"error_text": "написала", "accept_contains": ["написали"], "_note": "model may flag collective as ambiguous — soft expectation"},
+        {"error_text": "комнату он", "accept_contains": [", он"]},
+        {"error_text": "увидел что", "accept_contains": [", что"]},
+        {"error_text": "К сожалению я", "accept_contains": [", я"]},
+        {"error_text": "Иван приходи", "accept_contains": [", приходи"]},
+        {"error_text": "также", "accept": ["так же"]},
+        {"error_text": "учиться", "accept": ["учится"]},
+        {"error_text": "видела", "accept": ["видели"]}
+      ]
+    }
+  ]
+}

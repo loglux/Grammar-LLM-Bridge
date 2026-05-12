@@ -12,7 +12,7 @@ MAKEFLAGS += --no-print-directory
 
 .PHONY: help build up up-dev down restart status \
         logs-01 logs-02 logs-lb logs-dev \
-        smoke report quality clean-pyc
+        smoke report quality quality-ru clean-pyc
 
 help: ## Show this help
 	@grep -hE '^[a-zA-Z0-9_-]+:.*?##' $(MAKEFILE_LIST) | sort | \
@@ -63,6 +63,14 @@ quality: ## Quality suite. Usage: make quality MODEL=deepseek-chat
 	@test -n "$(MODEL)" || { \
 	  echo "Set MODEL=… (e.g. make quality MODEL=deepseek-chat)" >&2; exit 1; }
 	bash run_model_quality.sh $(MODEL)
+
+quality-ru: ## Russian quality suite. Usage: make quality-ru MODEL=deepseek-chat [BASE_URL=…] [API_KEY=…]
+	@test -n "$(MODEL)" || { \
+	  echo "Set MODEL=… (e.g. make quality-ru MODEL=deepseek-chat)" >&2; exit 1; }
+	bash run_model_quality.sh "$(MODEL)" 9040 \
+	  "$(or $(BASE_URL),https://api.openai.com/v1)" \
+	  "$(or $(API_KEY),$(OPENAI_API_KEY))" \
+	  custom qa-results/quality/gold_ru.json
 
 # --- House-keeping ---
 
