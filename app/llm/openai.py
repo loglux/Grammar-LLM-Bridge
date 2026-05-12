@@ -4,7 +4,7 @@ OpenAI/Ollama JSON Schema (Structured Outputs) mode.
 import json
 import logging
 from app.config import MODEL
-from app.prompts import SYSTEM_MESSAGE, GRAMMAR_SCHEMA
+from app.prompts import get_prompt, GRAMMAR_SCHEMA
 from app.llm.client import post_chat_completion, extract_message_content
 
 logger = logging.getLogger("customlt")
@@ -16,7 +16,7 @@ async def analyze_with_json_schema(text: str, language: str, level: str):
     Guarantees strict structure compliance using system + user messages.
     """
 
-    system_message = SYSTEM_MESSAGE
+    system_message = get_prompt(language, level)
 
     user_message = f"""Language: {language}
 Mode: {level}

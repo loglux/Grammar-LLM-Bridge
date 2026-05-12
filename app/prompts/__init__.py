@@ -4,7 +4,6 @@ Prompt assembly: language-aware system message builder.
 Public surface:
 - get_prompt(language, level) -> str
 - GRAMMAR_SCHEMA            (response JSON schema, re-exported from common)
-- SYSTEM_MESSAGE            (back-compat alias = get_prompt("en", "default"))
 
 Adding a new language:
 1. Create `app/prompts/<lang>.py` exporting a `BLOCKS` list of strings.
@@ -82,8 +81,4 @@ def get_prompt(language: str, level: str) -> str:
     return "\n\n".join(parts)
 
 
-# Back-compat: existing callers (`from app.prompts import SYSTEM_MESSAGE`)
-# continue to work. Equivalent to the previous static prompt for English.
-SYSTEM_MESSAGE = get_prompt(_DEFAULT_LANGUAGE, "default")
-
-__all__ = ["get_prompt", "GRAMMAR_SCHEMA", "SYSTEM_MESSAGE"]
+__all__ = ["get_prompt", "GRAMMAR_SCHEMA"]

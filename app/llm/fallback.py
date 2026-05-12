@@ -4,7 +4,7 @@ Fallback mode for providers with unknown JSON support.
 import json
 import logging
 from app.config import MODEL
-from app.prompts import SYSTEM_MESSAGE
+from app.prompts import get_prompt
 from app.llm.client import post_chat_completion, extract_message_content
 from app.llm.deepseek import sanitize_json_string
 
@@ -18,7 +18,7 @@ async def analyze_with_json_object_fallback(text: str, language: str, level: str
     """
     logger.warning("Using fallback mode (manual JSON parsing)")
 
-    system_message = SYSTEM_MESSAGE
+    system_message = get_prompt(language, level)
 
     user_message = f"""Language: {language}
 Mode: {level}

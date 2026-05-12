@@ -5,7 +5,7 @@ import json
 import logging
 import re
 from app.config import MODEL
-from app.prompts import SYSTEM_MESSAGE
+from app.prompts import get_prompt
 from app.llm.client import post_chat_completion, extract_message_content
 
 logger = logging.getLogger("customlt")
@@ -29,7 +29,7 @@ async def analyze_with_json_object(text: str, language: str, level: str):
     """
     logger.info("Using DeepSeek json_object mode")
 
-    system_message = SYSTEM_MESSAGE
+    system_message = get_prompt(language, level)
 
     user_message = f"""Language: {language}
 Mode: {level}
