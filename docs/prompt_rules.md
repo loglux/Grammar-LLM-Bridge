@@ -37,39 +37,24 @@ These extend the firewall in the same forbid/allow shape rather than replacing i
 
 ### Per-language prompt modules
 
-Today `app/prompts.py` is one file built from English-only guard blocks (SVA, article rules, ESL hints). These aren't a starting point for other languages — each language needs its own native rule set (Russian has no articles, German has cases and compounds, Spanish has ser/estar and accents, etc.).
+**Scaffolding: done.** `app/prompts.py` was split into a package (`app/prompts/`) with `common.py` (language-neutral blocks), `en.py` (English-specific SVA / articles / confusables), and an `__init__.py` exposing `get_prompt(language, level)` plus `GRAMMAR_SCHEMA`. The dispatcher normalises locales (`en-GB` → `en`, case-insensitive) and falls back to English with a warning for unknown languages. The three LLM providers (`deepseek.py`, `openai.py`, `fallback.py`) now call `get_prompt(language, level)` per request. Behaviour for current callers is unchanged byte-for-byte. Design and per-commit history live in [`research/prompts_modular_refactor.md`](./research/prompts_modular_refactor.md).
 
-Planned layout (replaces the current single file):
+Current layout:
 
 ```
 app/prompts/
-├── __init__.py        # get_prompt(language, mode) dispatcher
-├── common.py          # language-agnostic blocks: SYSTEM_INTRO, MODE_BLOCK,
-│                      # output-format rules, LaTeX/markdown guards
-├── en.py              # English: SVA, articles, ESL, confusables
-├── ru.py              # Russian: падежи, согласование, частые ошибки
-├── de.py              # German: cases, articles, compound-word splits
-├── fr.py              # French: accords, élision, accents
-└── es.py              # Spanish: ser/estar, accents, agreement
+├── __init__.py        # get_prompt(language, level) dispatcher
+├── common.py          # SYSTEM_INTRO, MODE_BLOCK, output/format/critical
+│                      # blocks, LaTeX guards, GRAMMAR_SCHEMA
+└── en.py              # English: SVA, articles, confusables (BLOCKS list)
 ```
 
-Dispatcher contract (`app/prompts/__init__.py`):
+**Per-language content: pending.** Adding `ru.py`, `de.py`, `fr.py`, `es.py`, etc. is now a one-file change per language: create `app/prompts/<lang>.py` exporting a `BLOCKS = [...]` list, then register one row in `_LANGUAGE_MODULES` in `__init__.py`. Each new language should ship with:
 
-```python
-def get_prompt(language: str, mode: str) -> str:
-    """Compose the system prompt for the given LT language code and mode.
+- a per-language gold suite under `qa-results/quality/<lang>/`,
+- focused unit tests if the module adds non-trivial logic (most won't — pure block lists need no extra unit tests beyond the dispatcher's).
 
-    Strategy:
-    1. Normalise `language` to a 2-letter root (en-GB → en, ru-RU → ru).
-    2. Start with `common.SYSTEM_INTRO + common.MODE_BLOCK(mode)`.
-    3. If a `app/prompts/<lang>.py` module exists, append its blocks.
-    4. If not, fall back to `en` blocks and log a warning.
-    """
-```
-
-Each language module exports a fixed surface (e.g. `SVA_BLOCK`, `ARTICLE_BLOCK`, `EXTRA_GUARDS`) so the dispatcher can assemble them uniformly. Level modes (`default`/`picky`) are orthogonal to language — `MODE_BLOCK` lives in `common.py` and applies universally; language modules may export an optional `PICKY_EXTRA` block for language-specific picky-only rules.
-
-Tests live under `tests/unit/prompts/test_<lang>.py`, with small per-language gold suites under `qa-results/quality/<lang>/`.
+Level modes (`default`/`picky`) are orthogonal to language: `MODE_BLOCK` lives in `common.py` and applies universally. A language module may export an optional `PICKY_EXTRA` block for picky-only additions; the dispatcher will be extended to consume it when the first language needs it.
 
 ### `language=auto` auto-detection
 

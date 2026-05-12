@@ -1,6 +1,6 @@
 # Prompts: modular refactor
 
-Status: **planned** (no commits yet). Tracked here as a working doc; the canonical short summary lives in [`prompt_rules.md` → Future / Planned](../prompt_rules.md#per-language-prompt-modules).
+Status: **done** (scaffolding complete; no language module beyond `en` yet). Canonical short summary in [`prompt_rules.md` → Per-language prompt modules](../prompt_rules.md#per-language-prompt-modules).
 
 ## Why
 
@@ -113,10 +113,10 @@ Each commit individually builds and passes all tests.
 
 ## Status
 
-- [ ] Commit 1 — package replaces file (`common.py` + `en.py` + dispatcher; `SYSTEM_MESSAGE` re-exported as bridge)
-- [ ] Commit 2 — providers switched to `get_prompt`
-- [ ] Commit 3 — unit tests for dispatcher
-- [ ] Commit 4 — `prompt_rules.md` cross-link
+- [x] Commit 1 — package replaces file (`common.py` + `en.py` + dispatcher; `SYSTEM_MESSAGE` re-exported as bridge) — `ae378d1`
+- [x] Commit 2 — providers switched to `get_prompt`; bridge re-export removed — `7cb6700`
+- [x] Commit 3 — unit tests for dispatcher (7 tests, 28/28 total green) — `26373b2`
+- [x] Commit 4 — `prompt_rules.md` cross-link, status section updated — this commit
 
 ## How it works once shipped
 
